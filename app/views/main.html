@@ -1,9 +1,50 @@
-<div class="hero-unit">
-  <h1>'Allo, 'Allo!</h1>
-  <p>You now have</p>
-  <ul>
-      <li ng-repeat="thing in awesomeThings">{{thing}}</li>
-  </ul>
-  <p>installed.</p>
-  <h3>Enjoy coding! - Yeoman</h3>
+<div class="row">
+  <div class="col-lg-12">
+      <h1>Mini Power PC</h1>
+  </div>
+
+  <div class="col-sm-4">
+    <button type="button" class="btn btn-danger">Reset</button><p></p>
+    <h2>Register</h2>
+    <table class="table table-bordered">
+      <tr><th>Befehlszähler</th><td>100</td></tr>
+      <tr><th>Befehlsregister</th><td></td></tr>
+      <tr><th>Akkumulator</th><td></td></tr>
+      <tr><th>Carry-Bit</th><td></td></tr>
+      <tr><th>Reg-1</th><td></td></tr>
+      <tr><th>Reg-2</th><td></td></tr>
+      <tr><th>Reg-3</th><td></td></tr>
+    </table>
+    <table class="table table-bordered">
+      <tr><th>Ausgeführte Befehle</th><td>0</td></tr>
+    </table>
+  </div>
+
+  <div class="col-sm-4">
+    <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#program-form">
+      Programm eingeben
+    </button><p></p>
+    <div id="program-form" class="collapse">
+      <label for="program-entry">Programm</label><br>
+      <textarea class="form-control" rows="10" id="program-entry" name="programm"></textarea>
+    </div>
+    <h2>Programm</h2>
+    <!-- Der aktuell ausgeführte Befehl -5 + 10 Befehle -->
+    <table class="table table-bordered">
+      <tr><th>500</th><td>00110010</td><td>15</td></tr>
+    </table>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="btn-group">
+      <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-step-forward"></span> Step</button>
+      <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-play"></span> Slow</button>
+      <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-fast-forward"></span> Fast</button>
+    </div><p></p>
+    <h2>Datenspeicher</h2>
+    <table class="table table-bordered">
+      <tr><th>500</th><td>00110011</td><td></td></tr>
+    </table>
+  </div>
+
 </div>
