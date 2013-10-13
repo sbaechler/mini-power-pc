@@ -24,15 +24,25 @@
     <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#program-form">
       Programm eingeben
     </button><p></p>
-    <div id="program-form" class="collapse">
-      <label for="program-entry">Programm</label><br>
-      <textarea class="form-control" rows="10" id="program-entry" name="programm"></textarea>
+    <div id="program-form" class="collapse" ng-controller="LoaderCtrl">
+        <div class="nullable">
+          <select ng-model="programChoice" ng-options="p as p.name for p in defaultPrograms" ng-change="fillProgram(programChoice)">
+            <option value="">Standardprogramme</option>
+          </select>
+        </div>
+
+      <br/>
+        <label for="program-entry">Programm</label><br>
+        <textarea class="form-control" rows="10" id="program-entry" ng-model="programSource" name="programm"></textarea>
+        <input class="btn btn-primary" type="submit" value="Load">
     </div>
     <h2>Programm</h2>
-    <!-- Der aktuell ausgeführte Befehl -5 + 10 Befehle -->
-    <table class="table table-bordered">
-      <tr><th>500</th><td>00110010</td><td>15</td></tr>
-    </table>
+    <div ng-controller="AssemblerCtrl">
+      <!-- Der aktuell ausgeführte Befehl -5 + 10 Befehle -->
+      <table class="table table-bordered">
+        <tr><th>500</th><td>00110010</td><td>15</td></tr>
+      </table>
+    </div>
   </div>
 
   <div class="col-sm-4">
