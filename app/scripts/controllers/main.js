@@ -19,20 +19,21 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$http',
         $scope.executionCounter = 0;
         $scope.currentSteps = [];
         $scope._update_ui = function(){
-            var mem = [];
-            var start = $scope.instructionCounter>=5 ? $scope.instructionCounter-5 : 5,
-                end = $scope.instructionCounter <= (MEMORY-10) ? $scope.instructionCounter+10 : MEMORY-10;
-            for (var i=start; i<=end; i++) {
-            mem.push({'value': $scope.memory[i], 'index': i,
-                          'class': i==$scope.instructionCounter ? 'success': ''});
-            }
-            $scope.currentSteps = mem;
-            // Befehlsregister
-            if ($scope.memory[$scope.instructionCounter] != undefined) {
-                $scope.instructionRegister = $scope.memory[$scope.instructionCounter] + " "
-                                           + $scope.memory[$scope.instructionCounter+1];
-            }
-        };
+                    var mem = [];
+                    var start = $scope.instructionCounter>=5 ? $scope.instructionCounter-5 : 5,
+                        end = $scope.instructionCounter <= (MEMORY-10) ? $scope.instructionCounter+10 : MEMORY-10;
+                    for (var i=start; i<=end; i++) {
+                    mem.push({'value': $scope.memory[i], 'index': i,
+                                  'class': i==$scope.instructionCounter ? 'success': ''});
+                    }
+                    $scope.currentSteps = mem;
+                    // Befehlsregister
+                    if ($scope.memory[$scope.instructionCounter] != undefined) {
+                        $scope.instructionRegister = $scope.memory[$scope.instructionCounter] + " "
+                                                   + $scope.memory[$scope.instructionCounter+1];
+                    }
+                };
+        $scope._update_ui();
         $scope.step = function(){
             // Befehl auslesen
             // Befehl interpretieren
