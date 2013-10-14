@@ -245,7 +245,7 @@ sysconv = {
     },
 
     dec2twoscomplement: function(dec, size){
-        size = size || 16;
+        var size = size || 16;
         var bin = this.decinputtobin(dec);
         if (dec[0] === '-'){
             return this.twoscomplement(this.onescomplement(this.bintruncate(bin, size)));
