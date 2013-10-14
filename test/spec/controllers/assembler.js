@@ -16,7 +16,7 @@ describe('Controller: AssemblerCtrl', function () {
   }));
 
   it('should have a mnemonics object', function () {
-    expect(Object.keys(scope.mnemonics).length).toBe(3);
+    // expect(Object.keys(scope.mnemonics).length).toBe(3);
   });
 
   it('should clear the right register', function(){
@@ -56,7 +56,59 @@ describe('Controller: AssemblerCtrl', function () {
       expect(a_1).toEqual("11111111 11111111");
       expect(a16383).toEqual("10111111 11111111");
       expect(a_16384).toEqual("11000000 00000000");
-  })
+  });
+
+  it('should correctly increment and decrement', function(){
+     expect(scope.mnemonics.INC()).toBe("00000001 00000000");
+     expect(scope.mnemonics.DEC()).toBe("00000100 00000000");
+  });
+
+  it('should read from memory and write to memory', function(){
+     var a100 = "00 01100100",
+         a500 = "01 11110100";
+     // assume undefined bit is 0
+     expect(scope.mnemonics.LWDD("00","100")).toEqual("010000"+a100);
+     expect(scope.mnemonics.LWDD("10","500")).toEqual("010010"+a500);
+
+     expect(scope.mnemonics.SWDD("00", "100")).toEqual("011000"+a100);
+     expect(scope.mnemonics.SWDD("01", "500")).toEqual("011001"+a500);
+  });
+
+  it('should create shift codes', function(){
+      expect(scope.mnemonics.SRA()).toBe("00000101 00000000");
+      expect(scope.mnemonics.SLA()).toBe("00001000 00000000");
+      expect(scope.mnemonics.SRL()).toBe("00001001 00000000");
+      expect(scope.mnemonics.SLL()).toBe("00001100 00000000");
+  });
+
+  it('should create logical operator codes', function(){
+      expect(scope.mnemonics.AND("00")).toBe("00000010 00000000");
+      expect(scope.mnemonics.AND("10")).toBe("00001010 00000000");
+      expect(scope.mnemonics.OR("00")).toBe("00000011 00000000");
+      expect(scope.mnemonics.OR("10")).toBe("00001011 00000000");
+      expect(scope.mnemonics.NOT()).toBe("00000000 10000000");
+  });
+
+  it('should create jump commands', function(){
+      expect(scope.mnemonics.BZ("00")).toBe("00010010 00000000");
+      expect(scope.mnemonics.BNZ("10")).toBe("00011001 00000000");
+      expect(scope.mnemonics.BC("00")).toBe("00010011 00000000");
+      expect(scope.mnemonics.B("10")).toBe("00011000 00000000");
+  });
+
+  it('should create direct jump commands', function(){
+      var a100 = "00 01100100",
+         a500 = "01 11110100";
+      expect(scope.mnemonics.BZD("100")).toBe("00110" + a100);
+      expect(scope.mnemonics.BNZD("500")).toBe("00101" + a500);
+      expect(scope.mnemonics.BCD("100")).toBe("00111" + a100);
+      expect(scope.mnemonics.BD("500")).toBe("00100" + a500);
+  });
+
+  it('should create END command', function(){
+      expect(scope.mnemonics.END()).toBe("00000000 00000000");
+  });
+
 
 
 

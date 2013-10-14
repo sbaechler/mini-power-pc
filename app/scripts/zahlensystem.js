@@ -252,6 +252,5 @@ sysconv = {
         } else {
             return this.bintruncate(bin, size);
         }
-
     }
 }

@@ -3,7 +3,7 @@
 angular.module('miniPowerpcApp')
   .controller('MainCtrl', function ($scope) {
     $scope.memory = [];
-    $scope.memory[640-1] = undefined;  // create 640 array cells
+    $scope.memory[1024-1] = undefined;  // create 1024 array cells
     console.log("Power PC ready. Memory: " + $scope.memory.length + " Bytes.");
 
     $scope.r00 = null;  // Akku
@@ -17,3 +17,6 @@ angular.module('miniPowerpcApp')
     $scope.executionCounter = 0;
 
   });
+
+
+// angular.element($0).scope()
