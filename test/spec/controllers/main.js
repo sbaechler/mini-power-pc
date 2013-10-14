@@ -1,12 +1,19 @@
 'use strict';
 
 describe('Controller: MainCtrl', function () {
+  var $compile;
+  var $rootScope;
 
   // load the controller's module
-  beforeEach(module('miniPowerpcApp'));
+  beforeEach(module('miniPowerPCControllers'));
 
   var MainCtrl,
     scope;
+
+//  beforeEach(inject(function(_$compile_, _$rootScope_){
+//      $compile = _$compile_;
+//      $rootScope = _$rootScope_;
+//  }));
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {

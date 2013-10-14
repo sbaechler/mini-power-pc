@@ -37,24 +37,30 @@
         <input class="btn btn-primary" type="submit" value="Load">
     </div>
     <h2>Programm</h2>
-    <div ng-controller="AssemblerCtrl">
+    <div ng-controller="MainCtrl">
       <!-- Der aktuell ausgeführte Befehl -5 + 10 Befehle -->
       <table class="table table-bordered">
-        <tr><th>500</th><td>00110010</td><td>15</td></tr>
+        <tr ng-repeat="cell in currentSteps track by cell.index" class="{{cell.class}}">
+          <th>{{cell.index}}</th><td>{{cell.value}}</td>
+        </tr>
       </table>
     </div>
+    <div ng-controller="AssemblerCtrl"></div>
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-sm-4" ng-controller="MainCtrl">
     <div class="btn-group">
-      <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-step-forward"></span> Step</button>
+      <button type="button" ng-click="step()" class="btn btn-default"><span class="glyphicon glyphicon-step-forward"></span> Step</button>
       <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-play"></span> Slow</button>
       <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-fast-forward"></span> Fast</button>
     </div><p></p>
     <h2>Datenspeicher</h2>
     <table class="table table-bordered">
-      <tr><th>500</th><td>00110011</td><td></td></tr>
+      <tr ng-repeat="cell in memory | subarray:500:530 track by $index">
+        <th>{{$index|add:500}}</th><td>{{cell}}</td><td>{{memory|int16:$index:500}}</td>
+      </tr>
     </table>
   </div>
+
 
 </div>

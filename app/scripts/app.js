@@ -1,13 +1,19 @@
 'use strict';
 
-angular.module('miniPowerpcApp', [])
-  .config(function ($routeProvider) {
-    $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
-      })
-      .otherwise({
-        redirectTo: '/'
-      });
-  });
+var miniPowerpcApp = angular.module('miniPowerpcApp', [
+    'ngRoute',
+    'miniPowerPCControllers'
+]);
+
+
+miniPowerpcApp.config(['$routeProvider',
+     function ($routeProvider) {
+        $routeProvider
+          .when('/', {
+            templateUrl: 'views/main.html',
+            controller: 'MainCtrl'
+          })
+          .otherwise({
+            redirectTo: '/'
+          });
+  }]);

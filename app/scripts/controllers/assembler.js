@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('miniPowerpcApp')
-  .controller('LoaderCtrl', function ($scope) {
+angular.module('miniPowerPCControllers', [])
+  .controller('LoaderCtrl', ['$scope', function ($scope) {
 
     $scope.loadProgram = function(value){
         // deal with program input
@@ -19,11 +19,11 @@ angular.module('miniPowerpcApp')
         }
     };
 
-  });
+  }]);
 
 // Der Assemble Schritt muss pro Schritt mit der Ausführung stattfinden.
 angular.module('miniPowerpcApp')
-  .controller('AssemblerCtrl', function($scope){
+  .controller('AssemblerCtrl', ['$scope', function($scope){
     var validRegisters = function(rnr){
         if (typeof rnr != 'string') {
             throw("Register label must be string: " + rnr);
@@ -157,4 +157,4 @@ angular.module('miniPowerpcApp')
                     return "00000000 00000000";
         }
     }
-  });
+  }]);
