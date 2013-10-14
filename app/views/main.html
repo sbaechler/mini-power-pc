@@ -3,20 +3,20 @@
       <h1>Mini Power PC</h1>
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-sm-4" ng-controller="MainCtrl">
     <button type="button" class="btn btn-danger">Reset</button><p></p>
     <h2>Register</h2>
     <table class="table table-bordered">
-      <tr><th>Befehlszähler</th><td>100</td></tr>
-      <tr><th>Befehlsregister</th><td></td></tr>
-      <tr><th>Akkumulator</th><td></td></tr>
-      <tr><th>Carry-Bit</th><td></td></tr>
-      <tr><th>Reg-1</th><td></td></tr>
-      <tr><th>Reg-2</th><td></td></tr>
-      <tr><th>Reg-3</th><td></td></tr>
+      <tr><th>Befehlszähler</th><td>{{instructionCounter}}</td></tr>
+      <tr><th>Befehlsregister</th><td>{{instructionRegister}}</td></tr>
+      <tr><th>Carry-Bit</th><td>{{carryBit}}</td></tr>
+      <tr><th>Akkumulator</th><td>{{r00}}</td></tr>
+      <tr><th>Reg-1</th><td></td>{{r01}}</tr>
+      <tr><th>Reg-2</th><td></td>{{r10}}</tr>
+      <tr><th>Reg-3</th><td></td>{{r11}}</tr>
     </table>
     <table class="table table-bordered">
-      <tr><th>Ausgeführte Befehle</th><td>0</td></tr>
+      <tr><th>Ausgeführte Befehle</th><td>{{executionCounter}}</td></tr>
     </table>
   </div>
 
