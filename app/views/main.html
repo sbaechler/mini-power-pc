@@ -1,9 +1,9 @@
-<div class="row">
+<div class="row" ng-controller="MainCtrl">
   <div class="col-lg-12">
       <h1>Mini Power PC</h1>
   </div>
 
-  <div class="col-sm-4" ng-controller="MainCtrl">
+  <div class="col-sm-4">
     <button type="button" class="btn btn-danger">Reset</button><p></p>
     <h2>Register</h2>
     <table class="table table-bordered">
@@ -48,7 +48,7 @@
     <div ng-controller="AssemblerCtrl"></div>
   </div>
 
-  <div class="col-sm-4" ng-controller="MainCtrl">
+  <div class="col-sm-4">
     <div class="btn-group">
       <button type="button" ng-click="step()" class="btn btn-default"><span class="glyphicon glyphicon-step-forward"></span> Step</button>
       <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-play"></span> Slow</button>
