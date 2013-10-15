@@ -37,6 +37,21 @@ sysconv = {
       }
       return this.removezeros(bin);
     },
+    // Computes a binary array out of a binary input string
+    bininputtobin : function(bininput){
+      var len = bininput.length;
+      if(len == 0){return filledarray(false, 1);}
+      var bin = new Array(len);
+      var j = 0;
+      for (var i = 0; i < len; i++){
+        switch (bininput[i]){
+        case '0': bin[j++] = false; break;
+        case '1': bin[j++] = true; break;
+        default: break;
+        }
+      }
+      return removezeros(bin.slice(0, j));
+    },
     // Formats the given binary array to a decimal output string
     bintodecoutput: function(bin){
       var len = bin.length;
@@ -252,5 +267,8 @@ sysconv = {
         } else {
             return this.bintruncate(bin, size);
         }
+    },
+    bin2dec: function(bininput){
+        return bintodecoutput(bininputtobin(bininput));
     }
 }

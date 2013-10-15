@@ -56,8 +56,8 @@
     </div><p></p>
     <h2>Datenspeicher</h2>
     <table class="table table-bordered">
-      <tr ng-repeat="cell in memory | subarray:500:530 track by $index">
-        <th>{{$index|add:500}}</th><td>{{cell}}</td><td>{{memory|int16:$index:500}}</td>
+      <tr ng-repeat="cell in get_memory(500,530) track by $index">
+        <th>{{$index+500}}</th><td>{{cell}}</td><td>{{getDecimal($index+500)}}</td>
       </tr>
     </table>
   </div>

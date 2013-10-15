@@ -1,29 +1,20 @@
 'use strict';
 
 describe('Controller: MainCtrl', function () {
-  var $compile;
-  var $rootScope;
 
   // load the controller's module
   beforeEach(module('miniPowerPCControllers'));
-  beforeEach(module('miniPowerPCAssemblers'));
+  beforeEach(module('memoryProvider'));
 
-  var MainCtrl, AssemblerCtrl,
+  var MainCtrl,
     scope;
 
-//  beforeEach(inject(function(_$compile_, _$rootScope_){
-//      $compile = _$compile_;
-//      $rootScope = _$rootScope_;
-//  }));
-
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope) {
+  beforeEach(inject(function ($controller, $rootScope, _$memory_) {
     scope = $rootScope.$new();
     MainCtrl = $controller('MainCtrl', {
-      $scope: scope
-    });
-    AssemblerCtrl = $controller('AssemblerCtrl', {
-        $scope: scope
+      $scope: scope,
+      $memory: _$memory_
     });
   }));
 

@@ -1,7 +1,7 @@
 'use strict';
 var MiniPowerPCAssemblers = angular.module('miniPowerPCAssemblers', []);
 
-MiniPowerPCAssemblers.controller('LoaderCtrl', ['$scope', function ($scope) {
+MiniPowerPCAssemblers.controller('LoaderCtrl', ['$scope', '$memory', function($scope, $memory) {
 
     $scope.loadProgram = function(value){
         // deal with program input

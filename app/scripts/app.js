@@ -4,7 +4,8 @@ var miniPowerpcApp = angular.module('miniPowerpcApp', [
     'ngRoute',
     'miniPowerPCControllers',
     'miniPowerPCAssemblers',
-    'miniPowerPCFilters'
+    'miniPowerPCFilters',
+    'memoryProvider',
 ]);
 
 
@@ -19,3 +20,4 @@ miniPowerpcApp.config(['$routeProvider',
             redirectTo: '/'
           });
   }]);
+

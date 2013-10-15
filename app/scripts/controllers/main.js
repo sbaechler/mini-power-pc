@@ -1,12 +1,9 @@
 'use strict';
 var miniPowerPCControllers = angular.module('miniPowerPCControllers', []);
 
-miniPowerPCControllers.controller('MainCtrl', ['$scope', '$http',
-    function MainCtrl($scope, $http) {
-        var MEMORY = 1024;
-        $scope.memory = [];
-        $scope.memory[MEMORY-1] = undefined;  // create 1024 array cells
-        console.log("Power PC ready. Memory: " + $scope.memory.length + " Bytes.");
+miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
+    function MainCtrl($scope, $memory) {
+        console.log("Power PC ready. Memory: " + $memory.memory.length + " Bytes.");
 
         $scope.r00 = null;  // Akku
         $scope.r01 = null;  // R01
@@ -15,21 +12,25 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$http',
         $scope.instructionCounter = 100;
         $scope.instructionRegister = null;
         $scope.carryBit = 0;
+        $scope.get_memory = function(start, end){
+                                return $memory.memory(start, end);
+                            }
+        $scope.get_decimal = function(addr){
+                                return $memory.getDecimal(addr);
+                            }
 
         $scope.executionCounter = 0;
         $scope.currentSteps = [];
         $scope._get_instruction = function(){
-                    if ($scope.memory[$scope.instructionCounter] != undefined) {
-                        $scope.instructionRegister = $scope.memory[$scope.instructionCounter] + " "
-                                                   + $scope.memory[$scope.instructionCounter+1];
-                    }
+                    $scope.instructionRegister = $memory.getWord($scope.instructionCounter);
         }
         $scope._update_ui = function(){
                     var mem = [];
                     var start = $scope.instructionCounter>=5 ? $scope.instructionCounter-5 : 5,
-                        end = $scope.instructionCounter <= (MEMORY-10) ? $scope.instructionCounter+10 : MEMORY-10;
+                        end = $scope.instructionCounter <= ($memory.MEMORY-10) ?
+                                        $scope.instructionCounter+10 : $memory.MEMORY-10;
                     for (var i=start; i<=end; i++) {
-                    mem.push({'value': $scope.memory[i], 'index': i,
+                    mem.push({'value': $memory.memory()[i], 'index': i,
                                   'class': i==$scope.instructionCounter ? 'success': ''});
                     }
                     $scope.currentSteps = mem;
