@@ -2,7 +2,9 @@
 
 var miniPowerpcApp = angular.module('miniPowerpcApp', [
     'ngRoute',
-    'miniPowerPCControllers'
+    'miniPowerPCControllers',
+    'miniPowerPCAssemblers',
+    'miniPowerPCFilters'
 ]);
 
 

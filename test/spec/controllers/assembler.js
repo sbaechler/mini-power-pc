@@ -2,7 +2,7 @@
 
 describe('Controller: AssemblerCtrl', function () {
   // load the controller's module
-  beforeEach(module('miniPowerPCControllers'));
+  beforeEach(module('miniPowerPCAssemblers'));
 
   var AssemblerCtrl,
       scope;

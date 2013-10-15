@@ -6,8 +6,9 @@ describe('Controller: MainCtrl', function () {
 
   // load the controller's module
   beforeEach(module('miniPowerPCControllers'));
+  beforeEach(module('miniPowerPCAssemblers'));
 
-  var MainCtrl,
+  var MainCtrl, AssemblerCtrl,
     scope;
 
 //  beforeEach(inject(function(_$compile_, _$rootScope_){
@@ -20,6 +21,9 @@ describe('Controller: MainCtrl', function () {
     scope = $rootScope.$new();
     MainCtrl = $controller('MainCtrl', {
       $scope: scope
+    });
+    AssemblerCtrl = $controller('AssemblerCtrl', {
+        $scope: scope
     });
   }));
 
