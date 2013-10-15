@@ -7,13 +7,13 @@
     <button type="button" class="btn btn-danger">Reset</button><p></p>
     <h2>Register</h2>
     <table class="table table-bordered">
-      <tr><th>Befehlszähler</th><td>{{instructionCounter}}</td></tr>
-      <tr><th>Befehlsregister</th><td>{{instructionRegister}}</td></tr>
-      <tr><th>Carry-Bit</th><td>{{carryBit}}</td></tr>
-      <tr><th>Akkumulator</th><td>{{r00}}</td></tr>
-      <tr><th>Reg-1</th><td></td>{{r01}}</tr>
-      <tr><th>Reg-2</th><td></td>{{r10}}</tr>
-      <tr><th>Reg-3</th><td></td>{{r11}}</tr>
+      <tr><th>Befehlszähler</th><td>{{instructionCounter}}</td><td></td></tr>
+      <tr><th>Befehlsregister</th><td>{{instructionRegister}}</td><td></td></tr>
+      <tr><th>Carry-Bit</th><td>{{carryBit}}</td><td></td></tr>
+      <tr><th>Akkumulator</th><td>{{r00}}</td><td>{{r00|binToDec}}</td></tr>
+      <tr><th>Reg-1</th><td>{{r01}}</td><td>{{r01|binToDec}}</td></tr>
+      <tr><th>Reg-2</th><td>{{r10}}</td><td>{{r10|binToDec}}</td></tr>
+      <tr><th>Reg-3</th><td>{{r11}}</td><td>{{r11|binToDec}}</td></tr>
     </table>
     <table class="table table-bordered">
       <tr><th>Ausgeführte Befehle</th><td>{{executionCounter}}</td></tr>

@@ -3,9 +3,11 @@
 var miniPowerpcApp = angular.module('miniPowerpcApp', [
     'ngRoute',
     'miniPowerPCControllers',
-    'miniPowerPCAssemblers',
+    'miniPowerPCAssembler',
     'miniPowerPCFilters',
     'memoryProvider',
+    'miniPowerPCLoader',
+    'sysconvProvider'
 ]);
 
 

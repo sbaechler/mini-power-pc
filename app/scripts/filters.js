@@ -1,5 +1,5 @@
 'use strict';
-var miniPowerPCFilters = angular.module('miniPowerPCFilters', []);
+var miniPowerPCFilters = angular.module('miniPowerPCFilters', ['sysconvProvider']);
 
 miniPowerPCFilters
     .filter('subarray', function(){
@@ -10,4 +10,12 @@ miniPowerPCFilters
          return "";
        }
      }
-  });
+  }).filter('binToDec', ['$sysconv', function($sysconv){
+        return function(word){
+            if(word != undefined){
+                return $sysconv.bin2dec(word);
+            } else {
+                return "";
+            }
+        }
+    }]);

@@ -2,7 +2,8 @@
 
 describe('Controller: AssemblerCtrl', function () {
   // load the controller's module
-  beforeEach(module('miniPowerPCAssemblers'));
+  beforeEach(module('sysconvProvider'));
+  beforeEach(module('miniPowerPCAssembler'));
 
   var AssemblerCtrl,
       scope;

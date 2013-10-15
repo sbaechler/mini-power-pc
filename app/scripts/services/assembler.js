@@ -1,28 +1,9 @@
 'use strict';
-var MiniPowerPCAssemblers = angular.module('miniPowerPCAssemblers', []);
-
-MiniPowerPCAssemblers.controller('LoaderCtrl', ['$scope', '$memory', function($scope, $memory) {
-
-    $scope.loadProgram = function(value){
-        // deal with program input
-        console.log($scope.programSource);
-    };
-    $scope.defaultPrograms = [
-        {'name': 'add1', 'code': "CLR 00\nINC\n"},
-        {'name': 'add2', 'code': "CLR 00\nINC\nINC"}
-    ];
-    $scope.fillProgram = function(value){
-        if (value){
-            $scope.programSource = value.code;
-        } else {
-            $scope.programSource = "";
-        }
-    };
-
-  }]);
+var MiniPowerPCAssembler = angular.module('miniPowerPCAssembler', []);
 
 // Der Assemble Schritt muss pro Schritt mit der Ausführung stattfinden.
-MiniPowerPCAssemblers.controller('AssemblerCtrl', ['$scope', function($scope){
+MiniPowerPCAssembler.controller('AssemblerCtrl', ['$scope', '$sysconv',
+  function($scope, $sysconv){
     var validRegisters = function(rnr){
         if (typeof rnr != 'string') {
             throw("Register label must be string: " + rnr);
@@ -43,7 +24,7 @@ MiniPowerPCAssemblers.controller('AssemblerCtrl', ['$scope', function($scope){
         if (num < 0 || num > 1022 || isNaN(num)) {
             throw("Kann nur 1022 Speicherstellen alloziieren.");
         }
-        return sysconv.dec2twoscomplement(num.toString(), 10);
+        return $sysconv.dec2twoscomplement(num.toString(), 10);
     }
 
     /**
@@ -70,8 +51,8 @@ MiniPowerPCAssemblers.controller('AssemblerCtrl', ['$scope', function($scope){
                     if (num < -16384 || num > 16383 || isNaN(num)) {
                         throw("Zahl muss zwischen -16384 und 16383 sein. Ist: " + zahl);
                     }
-                    var op = [1].concat(sysconv.dec2twoscomplement(num.toString(), 15));
-                    return sysconv.bintobinoutput(op);
+                    var op = [1].concat($sysconv.dec2twoscomplement(num.toString(), 15));
+                    return $sysconv.bintobinoutput(op);
 
                },
         'INC': function(){
@@ -84,12 +65,12 @@ MiniPowerPCAssemblers.controller('AssemblerCtrl', ['$scope', function($scope){
                     validRegisters(rnr);
                     var op = [0,1,0,0].concat(regToArray(rnr))
                               .concat(addrToArray(addr));
-                    return sysconv.bintobinoutput(op);
+                    return $sysconv.bintobinoutput(op);
                 },
         'SWDD': function(rnr, addr) {
                     validRegisters(rnr);
                     var op = [0,1,1,0].concat(regToArray(rnr)).concat(addrToArray(addr));
-                    return sysconv.bintobinoutput(op);
+                    return $sysconv.bintobinoutput(op);
                 },
         'SRA': function(){
                     return "00000101 00000000";
@@ -138,19 +119,19 @@ MiniPowerPCAssemblers.controller('AssemblerCtrl', ['$scope', function($scope){
                 },
         'BZD': function(addr){
                     var op = [0,0,1,1,0].concat(addrToArray(addr));
-                    return sysconv.bintobinoutput(op);
+                    return $sysconv.bintobinoutput(op);
                 },
         'BNZD': function(addr){
                     var op = [0,0,1,0,1].concat(addrToArray(addr));
-                    return sysconv.bintobinoutput(op);
+                    return $sysconv.bintobinoutput(op);
                 },
         'BCD': function(addr){
                     var op = [0,0,1,1,1].concat(addrToArray(addr));
-                    return sysconv.bintobinoutput(op);
+                    return $sysconv.bintobinoutput(op);
                 },
         'BD': function(addr){
                     var op = [0,0,1,0,0].concat(addrToArray(addr));
-                    return sysconv.bintobinoutput(op);
+                    return $sysconv.bintobinoutput(op);
                 },
         'END': function(){
                     return "00000000 00000000";

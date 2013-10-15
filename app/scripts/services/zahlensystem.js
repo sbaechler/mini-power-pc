@@ -1,7 +1,8 @@
 // view-source:http://manderc.manderby.com/concepts/umrechner/index.php
+angular.module('sysconvProvider', [], function($provide){
+  $provide.factory('$sysconv', function(){
 
-sysconv = {
-
+  return {
     // Removes all prefixing zeros from the binary array.
     removezeros: function(bin){
       var i = 0;
@@ -271,4 +272,5 @@ sysconv = {
     bin2dec: function(bininput){
         return bintodecoutput(bininputtobin(bininput));
     }
-}
+  }
+});});

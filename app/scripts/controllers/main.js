@@ -3,7 +3,7 @@ var miniPowerPCControllers = angular.module('miniPowerPCControllers', []);
 
 miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
     function MainCtrl($scope, $memory) {
-        console.log("Power PC ready. Memory: " + $memory.memory.length + " Bytes.");
+        console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
 
         $scope.r00 = null;  // Akku
         $scope.r01 = null;  // R01
@@ -18,7 +18,6 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
         $scope.get_decimal = function(addr){
                                 return $memory.getDecimal(addr);
                             }
-
         $scope.executionCounter = 0;
         $scope.currentSteps = [];
         $scope._get_instruction = function(){
