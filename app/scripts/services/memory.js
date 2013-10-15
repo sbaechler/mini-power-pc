@@ -4,6 +4,7 @@ angular.module('memoryProvider', [], function($provide){
     $provide.factory('$memory', function(){
        var MEMORYSIZE = 1024,
            wordmatch = /^[01]{8} [01]{8}$/,
+           listeners = [],
            memory = Array(MEMORYSIZE);
        return {
            MEMORY: MEMORYSIZE,
@@ -36,6 +37,14 @@ angular.module('memoryProvider', [], function($provide){
                         else {
                             return sysconv.bin2dec(this.getWord(addr));
                         }
+           },
+           listen: function(callback){
+                       listeners.push(callback);
+           },
+           notify: function(){
+                       listeners.forEach(function(callback){
+                           callback();
+                       });
            }
        };
     });

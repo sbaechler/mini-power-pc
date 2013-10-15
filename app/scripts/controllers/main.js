@@ -23,7 +23,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
         $scope._get_instruction = function(){
                     $scope.instructionRegister = $memory.getWord($scope.instructionCounter);
         }
-        $scope._update_ui = function(){
+        $scope.updateUI = function(){
                     var mem = [];
                     var start = $scope.instructionCounter>=5 ? $scope.instructionCounter-5 : 5,
                         end = $scope.instructionCounter <= ($memory.MEMORY-10) ?
@@ -35,7 +35,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
                     $scope.currentSteps = mem;
                     $scope._get_instruction();
                 };
-        $scope._update_ui();
+        $scope.updateUI();
         $scope.step = function(){
             // Befehl auslesen
             // Befehl interpretieren
@@ -43,10 +43,9 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
             // Ev. Befehlszähler erhöhen. (Wenn kein Sprung)
 
             $scope.executionCounter += 1;
-            this._update_ui();
+            this.updateUI();
         };
-
-
+        $memory.listen($scope.updateUI);
   }]);
 
 

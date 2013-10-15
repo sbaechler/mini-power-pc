@@ -20,11 +20,11 @@
     </table>
   </div>
 
-  <div class="col-sm-4">
+  <div class="col-sm-4" ng-controller="LoaderCtrl">
     <button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#program-form">
       Programm eingeben
     </button><p></p>
-    <div id="program-form" class="collapse" ng-controller="LoaderCtrl">
+    <div id="program-form" class="collapse">
         <div class="nullable">
           <select ng-model="programChoice" ng-options="p as p.name for p in defaultPrograms" ng-change="fillProgram(programChoice)">
             <option value="">Standardprogramme</option>
@@ -34,10 +34,10 @@
       <br/>
         <label for="program-entry">Programm</label><br>
         <textarea class="form-control" rows="10" id="program-entry" ng-model="programSource" name="programm"></textarea>
-        <input class="btn btn-primary" type="submit" value="Load">
+        <input class="btn btn-primary" ng-click="loadProgram()" type="submit" value="Load">
     </div>
     <h2>Programm</h2>
-    <div ng-controller="MainCtrl">
+    <div>
       <!-- Der aktuell ausgeführte Befehl -5 + 10 Befehle -->
       <table class="table table-bordered">
         <tr ng-repeat="cell in currentSteps track by cell.index" class="{{cell.class}}">
@@ -45,7 +45,6 @@
         </tr>
       </table>
     </div>
-    <div ng-controller="LoaderCtrl"></div>
   </div>
 
   <div class="col-sm-4">
