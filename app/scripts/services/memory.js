@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('memoryProvider', [], function($provide){
-    $provide.factory('$memory', function(){
+angular.module('memoryProvider', ['sysconvProvider'], function($provide){
+    $provide.factory('$memory', ['$sysconv', function($sysconv){
        var MEMORYSIZE = 1024,
            wordmatch = /^[01]{8} [01]{8}$/,
            listeners = [],
@@ -34,9 +34,11 @@ angular.module('memoryProvider', [], function($provide){
            getDecimal: function(addr){
                         this._validateAddr(addr);
                         if(addr%2){ return "" }
-                        else {
-                            return sysconv.bin2dec(this.getWord(addr));
-                        }
+                        return $sysconv.bin2dec(this.getWord(addr));
+           },
+           setDecimal: function(addr, value){
+               if(addr%2){ return false; }
+               this.setWord(addr, $sysconv.bintobinoutput($sysconv.dec2twoscomplement(value)));
            },
            listen: function(callback){
                        listeners.push(callback);
@@ -47,5 +49,5 @@ angular.module('memoryProvider', [], function($provide){
                        });
            }
        };
-    });
+    }]);
 });

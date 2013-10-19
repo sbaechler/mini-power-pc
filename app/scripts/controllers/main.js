@@ -9,6 +9,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
         $scope.r01 = null;  // R01
         $scope.r10 = null;  // R02
         $scope.r11 = null;  // R03
+        $scope.speicherWert = null; // Temp. Variable bei Direkteingabe von Werten.
         $scope.instructionCounter = 100;
         $scope.instructionRegister = null;
         $scope.carryBit = 0;
@@ -53,6 +54,9 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
             this.instructionCounter = 100;
             this.executionCounter = 0;
             this.updateUI();
+        }
+        $scope.storeValue = function(addr){
+            $memory.setDecimal(addr, this.speicherWert);
         }
   }]);
 
