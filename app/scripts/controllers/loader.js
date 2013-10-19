@@ -9,7 +9,7 @@ angular.module('miniPowerPCLoader', [])
         lines = $scope.programSource.split('\n');
         lines.forEach(function(line){
            var cmd = line.split(" "), word;
-           console.log(cmd);
+           // console.log(cmd);
            if(cmd != ""){
                word = $assembler[cmd[0]](cmd[1], cmd[2], cmd[3]);
                console.log(word);
@@ -21,7 +21,17 @@ angular.module('miniPowerPCLoader', [])
     };
     $scope.defaultPrograms = [
         {'name': 'add1', 'code': "CLR 00\nINC\n"},
-        {'name': 'add2', 'code': "CLR 00\nINC\nINC"}
+        {'name': 'a+4*b+8*c', 'code': [
+            "LWDD 00 204",
+            "SLA",
+            "LWDD 01 202",
+            "ADD 01",
+            "SLA",
+            "SLA",
+            "LWDD 01 200",
+            "ADD 01",
+            "SWDD 00 206"].join("\n")
+        }
     ];
     $scope.fillProgram = function(value){
         if (value){

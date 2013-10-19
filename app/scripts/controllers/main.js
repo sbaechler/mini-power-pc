@@ -38,14 +38,22 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
         $scope.updateUI();
         $scope.step = function(){
             // Befehl auslesen
+            $scope._get_instruction();
             // Befehl interpretieren
+
             // Resultat in Speicher schreiben
             // Ev. Befehlszähler erhöhen. (Wenn kein Sprung)
+            $scope.instructionCounter += 2;
 
             $scope.executionCounter += 1;
             this.updateUI();
         };
         $memory.listen($scope.updateUI);
+        $scope.reset = function(){
+            this.instructionCounter = 100;
+            this.executionCounter = 0;
+            this.updateUI();
+        }
   }]);
 
 
