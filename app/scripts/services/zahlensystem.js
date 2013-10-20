@@ -41,7 +41,7 @@ angular.module('sysconvProvider', [], function($provide){
     // Computes a binary array out of a binary input string
     bininputtobin : function(bininput){
       var len = bininput.length;
-      if(len == 0){return filledarray(false, 1);}
+      if(len == 0){return this.filledarray(false, 1);}
       var bin = new Array(len);
       var j = 0;
       for (var i = 0; i < len; i++){
@@ -51,7 +51,7 @@ angular.module('sysconvProvider', [], function($provide){
         default: break;
         }
       }
-      return removezeros(bin.slice(0, j));
+      return this.removezeros(bin.slice(0, j));
     },
     // Formats the given binary array to a decimal output string
     bintodecoutput: function(bin){
@@ -259,7 +259,7 @@ angular.module('sysconvProvider', [], function($provide){
     twoscomplement: function(binonecomplement){
       return this.binaddone(binonecomplement);
     },
-
+    // convert decimal to two's complement.
     dec2twoscomplement: function(dec, size){
         var size = size || 16;
         var bin = this.decinputtobin(dec);
@@ -269,8 +269,13 @@ angular.module('sysconvProvider', [], function($provide){
             return this.bintruncate(bin, size);
         }
     },
+    // convert a binary String to decimal
     bin2dec: function(bininput){
-        return bintodecoutput(bininputtobin(bininput));
+        return this.bintodecoutput(this.bininputtobin(bininput));
+    },
+    // converts a binary array to 16 bit
+    binarray2word: function(bin){
+        return this.bintobinoutput(this.bintruncate(bin, 16));
     }
   }
 });});

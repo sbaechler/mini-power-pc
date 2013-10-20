@@ -47,6 +47,9 @@ angular.module('memoryProvider', ['sysconvProvider'], function($provide){
                        listeners.forEach(function(callback){
                            callback();
                        });
+           },
+           wipe: function(){
+               memory = Array(MEMORYSIZE);
            }
        };
     }]);

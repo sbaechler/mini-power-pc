@@ -5,6 +5,7 @@ angular.module('miniPowerPCLoader', [])
     var PROGRAMSTART = 100;
 
     $scope.loadProgram = function(){
+        $memory.wipe();
         var addr = PROGRAMSTART,
         lines = $scope.programSource.split('\n');
         lines.forEach(function(line){
@@ -16,11 +17,11 @@ angular.module('miniPowerPCLoader', [])
                $memory.setWord(addr, word);
                addr += 2;
            }
-           $memory.notify();
-           setTimeout(function(){
-               $document.find('#program-form').collapse('hide');
-           }, 200);
         });
+       $memory.notify();
+       setTimeout(function(){
+           $document.find('#program-form').collapse('hide');
+       }, 200);
     };
     $scope.defaultPrograms = [
         {'name': 'add1', 'code': "CLR 00\nINC\n"},

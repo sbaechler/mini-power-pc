@@ -5,6 +5,7 @@ describe('Controller: MainCtrl', function () {
   // load the controller's module
   beforeEach(module('miniPowerPCControllers'));
   beforeEach(module('memoryProvider'));
+  beforeEach(module('sysconvProvider'));
 
   var MainCtrl,
     scope;
