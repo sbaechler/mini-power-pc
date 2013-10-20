@@ -30,7 +30,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                 var akkuValue = $sysconv.bininputtobin($scope.r00);
                 var zahl = $sysconv.bininputtobin(matches[1]);
                 var result = $sysconv.binadd(akkuValue, zahl);
-                $scope.r00 = $sysconv.bintobinoutput(result);
+                $scope.r00 = $sysconv.binarray2word(result);
                 }
             },
 
