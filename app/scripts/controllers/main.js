@@ -1,8 +1,8 @@
 'use strict';
 var miniPowerPCControllers = angular.module('miniPowerPCControllers', []);
 
-miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
-    function MainCtrl($scope, $memory) {
+miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
+    function MainCtrl($scope, $memory, $sysconv) {
         console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
 
         $scope.r00 = null;  // Akku
@@ -20,7 +20,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
                                 return $memory.getDecimal(addr);
                             }
         $scope.executionCounter = 0;
-        $scope.currentSteps = [];
+        $scope.currentSteps = [];  // Hilfsarray zur Darstellung.
         $scope._get_instruction = function(){
                     $scope.instructionRegister = $memory.getWord($scope.instructionCounter);
         }
@@ -39,14 +39,15 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
         $scope.updateUI();
         $scope.step = function(){
             // Befehl auslesen
-            $scope._get_instruction();
+            this._get_instruction();
             // Befehl interpretieren
+            this._interpret();
 
             // Resultat in Speicher schreiben
             // Ev. Befehlszähler erhöhen. (Wenn kein Sprung)
-            $scope.instructionCounter += 2;
+            this.instructionCounter += 2;
 
-            $scope.executionCounter += 1;
+            this.executionCounter += 1;
             this.updateUI();
         };
         $memory.listen($scope.updateUI);
@@ -57,6 +58,9 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory',
         }
         $scope.storeValue = function(addr){
             $memory.setDecimal(addr, this.speicherWert);
+        }
+        $scope._interpret = function(){
+            console.log(this.instructionRegister);
         }
   }]);
 

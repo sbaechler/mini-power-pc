@@ -25,15 +25,15 @@ angular.module('miniPowerPCLoader', [])
     $scope.defaultPrograms = [
         {'name': 'add1', 'code': "CLR 00\nINC\n"},
         {'name': 'a+4*b+8*c', 'code': [
-            "LWDD 00 204",
+            "LWDD 00 504",
             "SLA",
-            "LWDD 01 202",
+            "LWDD 01 502",
             "ADD 01",
             "SLA",
             "SLA",
-            "LWDD 01 200",
+            "LWDD 01 500",
             "ADD 01",
-            "SWDD 00 206"].join("\n")
+            "SWDD 00 506"].join("\n")
         }
     ];
     $scope.fillProgram = function(value){
