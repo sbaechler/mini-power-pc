@@ -23,10 +23,8 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                     var akkuValue = $sysconv.bintodecoutput($scope.r00);
                     var result = regValue+akkuValue;
 
-                console.log($scope['r'+matches[1]]);
-                console.log(regValue);
-                console.log("result: "+result);
                     $scope.r00 = $sysconv.decinputtobin(result);
+
                 }},
 
             {"name": "ADDD #Zahl", "regex": /^1([01]{15})$/,  "assemblerFunction": function(matches) {
@@ -39,16 +37,15 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
 
             {"name": "INC", "regex": /^00000001[01]{8}$/, "assemblerFunction": function(matches) {
                 $scope.r00 = $sysconv.binarray2word($sysconv.binaddone(
-                                            $sysconv.bininputtobin($scope.r00)));
+                $sysconv.bininputtobin($scope.r00)));
                 }},
             {"name": "DEC", "regex": /^00000100[01]{8}$/, "assemblerFunction": function(matches) {
                 }},
 
             {"name": "LWDD Rnr, #Adr", "regex": /^010[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
-                    var addrInDec = $scope.get_decimal(matches[2]);
-                    var arrayOfAdress = $scope.get_memory(addrInDec, addrInDec+1);
-
-                    $scope['r'+matches[1]] = ""+arrayOfAdress[0]+" "+arrayOfAdress[1];
+                    var addrInDec = $sysconv.bin2dec(matches[2]);
+                    $scope['r'+matches[1]] = $memory.getWord(addrInDec);
+                    
             }},
 
 
@@ -60,7 +57,8 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
             {"name": "SRA", "regex": /^00000101[01]{8}$/, "assemblerFunction": function(matches) {
             }},
             {"name": "SLA", "regex": /^00001000[01]{8}$/,"assemblerFunction": function(matches) {
-                     $scope.r00 = $scope.binten($scope.r00);
+                $scope.r00 = $sysconv.binten($scope.r00);
+                //$scope.r00 = $sysconv.binten($sysconv.bininputtobin($scope.r00));
             }},
             {"name": "SRL Rnr", "regex": /^00001001[01]{8}$/, "assemblerFunction": function(matches) {
             }},
