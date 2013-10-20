@@ -10,10 +10,11 @@ describe('Controller: MainCtrl', function () {
     scope;
 
   // Initialize the controller and a mock scope
-  beforeEach(inject(function ($controller, $rootScope, _$memory_) {
+  beforeEach(inject(function ($controller, $rootScope, _$memory_, $sysconv) {
     scope = $rootScope.$new();
     MainCtrl = $controller('MainCtrl', {
       $scope: scope,
+      $sysconv: $sysconv,
       $memory: _$memory_
     });
   }));
