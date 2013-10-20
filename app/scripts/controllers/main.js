@@ -30,14 +30,16 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                 }},
 
             {"name": "ADDD #Zahl", "regex": /^1([01]{15})$/,  "assemblerFunction": function(matches) {
-                var regValue = $sysconv.decinputtobin($scope['r'+matches[1]]);
-                var zahl = matches[1];
-                var result = regValue+akkuValue;
-
-                $scope.r00 = $sysconv.bintodecoutput(result);
-                }},
+                var akkuValue = $sysconv.bininputtobin($scope.r00);
+                var zahl = $sysconv.bininputtobin(matches[1]);
+                var result = $sysconv.binadd(akkuValue, zahl);
+                $scope.r00 = $sysconv.binarray2word(result);
+                }
+            },
 
             {"name": "INC", "regex": /^00000001[01]{8}$/, "assemblerFunction": function(matches) {
+                $scope.r00 = $sysconv.binarray2word($sysconv.binaddone(
+                                            $sysconv.bininputtobin($scope.r00)));
                 }},
             {"name": "DEC", "regex": /^00000100[01]{8}$/, "assemblerFunction": function(matches) {
                 }},
@@ -134,6 +136,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
         $scope.reset = function(){
             this.instructionCounter = 100;
             this.executionCounter = 0;
+            $memory.wipe();
             this.updateUI();
         }
         $scope.storeValue = function(addr){
@@ -149,6 +152,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                     console.log("Assemblercode: "+this.assemblerCommands[i].name+"-"+regex);
                     var matches = regex.exec(instruction);
                     this.assemblerCommands[i].assemblerFunction(matches);
+                    console.log(matches);
                     break;
                 }
             }
