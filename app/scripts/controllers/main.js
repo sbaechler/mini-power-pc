@@ -60,7 +60,8 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
             $memory.setDecimal(addr, this.speicherWert);
         }
         $scope._interpret = function(){
-            console.log(this.instructionRegister);
+            var instruction = this.instructionRegister.replace(" ", "");
+
         }
   }]);
 
