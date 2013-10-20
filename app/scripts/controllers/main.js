@@ -23,6 +23,9 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                     var akkuValue = $sysconv.bintodecoutput($scope.r00);
                     var result = regValue+akkuValue;
 
+                console.log($scope['r'+matches[1]]);
+                console.log(regValue);
+                console.log("result: "+result);
                     $scope.r00 = $sysconv.decinputtobin(result);
                 }},
 
