@@ -23,3 +23,10 @@ body {
 .memory-table .display_false { display: none; }
 .memory-table input { border: 1px solid #ddd; }
 .memory-table input:focus { border: 1px solid grey; }
+
+.button-load { margin-top: 1em; }
+
+.scrolling-wrapper {
+    max-height: 500px;
+    overflow-y: scroll;
+}

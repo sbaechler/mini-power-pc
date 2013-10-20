@@ -1,7 +1,7 @@
 'use strict';
 angular.module('miniPowerPCLoader', [])
-.controller('LoaderCtrl', ['$scope', '$memory', '$assembler',
-  function($scope, $memory, $assembler) {
+.controller('LoaderCtrl', ['$scope', '$memory', '$assembler', '$document',
+  function($scope, $memory, $assembler, $document) {
     var PROGRAMSTART = 100;
 
     $scope.loadProgram = function(){
@@ -17,6 +17,9 @@ angular.module('miniPowerPCLoader', [])
                addr += 2;
            }
            $memory.notify();
+           setTimeout(function(){
+               $document.find('#program-form').collapse('hide');
+           }, 200);
         });
     };
     $scope.defaultPrograms = [

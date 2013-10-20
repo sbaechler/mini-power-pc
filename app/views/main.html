@@ -34,16 +34,18 @@
       <br/>
         <label for="program-entry">Programm</label><br>
         <textarea class="form-control" rows="10" id="program-entry" ng-model="programSource" name="programm"></textarea>
-        <input class="btn btn-primary" ng-click="loadProgram()" type="submit" value="Load">
+        <input class="btn btn-primary button-load" ng-click="loadProgram()" type="submit" value="Load">
     </div>
     <h2>Programm</h2>
     <div>
-      <!-- Der aktuell ausgeführte Befehl -5 + 10 Befehle -->
-      <table class="table table-bordered">
-        <tr ng-repeat="cell in currentSteps track by cell.index" class="{{cell.class}}">
-          <th>{{cell.index}}</th><td>{{cell.value}}</td>
-        </tr>
-      </table>
+      <div class="scrolling-wrapper">
+        <!-- Der aktuell ausgeführte Befehl -5 + 10 Befehle -->
+        <table class="table table-bordered">
+          <tr ng-repeat="cell in currentSteps track by cell.index" class="{{cell.class}}">
+            <th>{{cell.index}}</th><td>{{cell.value}}</td>
+          </tr>
+        </table>
+      </div>
     </div>
   </div>
 
@@ -54,7 +56,7 @@
       <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-fast-forward"></span> Fast</button>
     </div><p></p>
     <h2>Datenspeicher</h2>
-    <div style="height: 500px; overflow-y: auto;">
+    <div class="scrolling-wrapper">
       <table class="table table-bordered memory-table">
         <tr ng-repeat="cell in get_memory(500,530) track by $index">
           <th>{{$index+500}}</th><td>{{cell}}</td><td style="width: 6em;"><input type="text" ng-Pattern="/\d+/"
