@@ -9,12 +9,17 @@ angular.module('memoryProvider', ['sysconvProvider'], function($provide){
        return {
            MEMORY: MEMORYSIZE,
            _validateAddr: function(addr){
-                    if (addr < 0) { throw("Invalid memory address") }
-                    else if (addr > MEMORYSIZE-1) { throw("Out of memory error")}
+                    if (addr < 0) { throw("Invalid memory address"); }
+                    else if (addr > MEMORYSIZE-1) { throw("Out of memory error"); }
+                    return parseInt(addr);
            },
            memory :    function(start, end){ return memory.slice(start, end); },
+           setMemory:  function(addr, value){
+                            var addr = this._validateAddr(addr);
+                            memory[addr] = value;
+                        },
            setWord : function(addr, value) {
-                       this._validateAddr(addr);
+                       var addr = this._validateAddr(addr);
                        if(!value.match(wordmatch)) {
                            throw("Can only save words (16 bit strings)")
                        }
@@ -23,22 +28,22 @@ angular.module('memoryProvider', ['sysconvProvider'], function($provide){
                        memory[addr+1] = value[1];
                        },
            getWord : function(addr){
-                       this._validateAddr(addr);
-                       if(memory[addr] != undefined) {
-                           return memory[addr]+" "+memory[addr+1];
-                       } else {
-                           return "";
+                       var addr = this._validateAddr(addr);
+                       if(memory[addr] !== undefined) {
+                           return ""+memory[addr]+" "+memory[addr+1];
                        }
+                       return "";
 
            },
            getDecimal: function(addr){
-                        this._validateAddr(addr);
+                        var addr = this._validateAddr(addr);
                         if(addr%2){ return "" }
-                        return $sysconv.bin2dec(this.getWord(addr));
+                        return parseInt($sysconv.bin2dec(this.getWord(addr)));
            },
            setDecimal: function(addr, value){
                if(addr%2){ return false; }
-               this.setWord(addr, $sysconv.bintobinoutput($sysconv.dec2twoscomplement(value)));
+               this.setWord(addr, $sysconv.bintobinoutput(
+                   $sysconv.dec2twoscomplement(value.toString())));
            },
            listen: function(callback){
                        listeners.push(callback);

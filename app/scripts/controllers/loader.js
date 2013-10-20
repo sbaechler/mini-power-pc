@@ -1,5 +1,5 @@
 'use strict';
-angular.module('miniPowerPCLoader', [])
+angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniPowerPCAssembler'])
 .controller('LoaderCtrl', ['$scope', '$memory', '$assembler', '$document',
   function($scope, $memory, $assembler, $document) {
     var PROGRAMSTART = 100;
