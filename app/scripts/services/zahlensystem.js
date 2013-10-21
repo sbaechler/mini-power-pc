@@ -259,6 +259,16 @@ angular.module('sysconvProvider', [], function($provide){
     twoscomplement: function(binonecomplement){
       return this.binaddone(binonecomplement);
     },
+    twoscomplement2dec: function(twoscomplement) {
+        if(parseInt(twoscomplement[0]) == 0) {
+            return this.bin2dec(twoscomplement);
+        } else {
+            var bin = this.bininputtobin(twoscomplement);
+            bin = this.binaddone(this.onescomplement(bin));
+            return this.bintodecoutput(bin) * -1;
+        }
+    },
+
     // convert decimal to two's complement.
     dec2twoscomplement: function(dec, size){
         var size = size || 16;

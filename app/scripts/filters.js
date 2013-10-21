@@ -13,7 +13,7 @@ miniPowerPCFilters
   }).filter('binToDec', ['$sysconv', function($sysconv){
         return function(word){
             if(word != undefined){
-                return $sysconv.bin2dec(word);
+                return $sysconv.twoscomplement2dec(word);
             } else {
                 return "";
             }
