@@ -91,4 +91,35 @@ describe('Controller: MainCtrl', function () {
 
     });
 
+
+
+   //test LWDD Rnr, #Adr
+    it('Mnemonic LWDD Rnr, #Adr test', function(){
+        scope.r00 = "00000000 00000000";
+        _$memory_.setWord("500", "00000000 11111110");
+        scope.instructionRegister = "011100100 11110100)";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 11111110");
+
+
+    });
+
+    //test SLA
+    it('Mnemonic SLA test', function(){
+        scope.r00 = "00000000 00000000";
+        scope.instructionRegister = "00001000 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000000");
+
+        scope.r00 = "00000000 00000010";
+        scope.instructionRegister = "00001000 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000100");
+
+        scope.r00 = "00000000 00000011";
+        scope.instructionRegister = "00001000 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000110");
+    });
+
 });

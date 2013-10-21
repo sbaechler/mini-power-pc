@@ -24,7 +24,6 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                     var result = regValue+akkuValue;
 
                     $scope.r00 = $sysconv.decinputtobin(result);
-
                 }},
 
             {"name": "ADDD #Zahl", "regex": /^1([01]{15})$/,  "assemblerFunction": function(matches) {
@@ -43,22 +42,24 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                 }},
 
             {"name": "LWDD Rnr, #Adr", "regex": /^010[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
-                    var addrInDec = $sysconv.bin2dec(matches[2]);
-                    $scope['r'+matches[1]] = $memory.getWord(addrInDec);
-                    
+
+                var addrInDec = $sysconv.bin2dec(matches[2]);
+                $scope['r'+matches[1]] = $memory.getWord(addrInDec);
             }},
 
 
             {"name": "SWDD Rnr, #Adr", "regex": /^011[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
                    var regValue = $scope['r'+matches[1]];
-                   var address = $sysconv.bintodecoutput(matches[2]);
+                   var address = $sysconv.bin2dec(matches[2]);
                    $memory.setWord(address, regValue);
             }},
             {"name": "SRA", "regex": /^00000101[01]{8}$/, "assemblerFunction": function(matches) {
             }},
             {"name": "SLA", "regex": /^00001000[01]{8}$/,"assemblerFunction": function(matches) {
-                $scope.r00 = $sysconv.binten($scope.r00);
-                //$scope.r00 = $sysconv.binten($sysconv.bininputtobin($scope.r00));
+                var binarray = $sysconv.bininputtobin($scope.r00);
+                var multArray = $sysconv.binten(binarray);
+                var result = $sysconv.binarray2word(multArray);
+                $scope.r00 = result;
             }},
             {"name": "SRL Rnr", "regex": /^00001001[01]{8}$/, "assemblerFunction": function(matches) {
             }},
