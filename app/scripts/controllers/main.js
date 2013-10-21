@@ -10,7 +10,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
         $scope.r01 = null;  // R01
         $scope.r10 = null;  // R02
         $scope.r11 = null;  // R03
-        $scope.speicherWert = null; // Temp. Variable bei Direkteingabe von Werten.
+        $scope.speicherWert = []; // Temp. Variable bei Direkteingabe von Werten.
         $scope.instructionCounter = 100;
         $scope.instructionRegister = null;
         $scope.carryBit = false;
@@ -153,7 +153,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
             this.updateUI();
         }
         $scope.storeValue = function(addr){
-            $memory.setDecimal(addr, this.speicherWert.toString());
+            $memory.setDecimal(addr, this.speicherWert[parseInt(addr)].toString());
         }
         $scope._interpret = function(){
             var instruction = this.instructionRegister.replace(" ", "");
