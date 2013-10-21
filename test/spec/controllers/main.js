@@ -57,9 +57,9 @@ describe('Controller: MainCtrl', function () {
     //test ADD Rnr
     it('Mnemonic Add Rnr test', function(){
         //Mnemonic: /0000([01]{2})111[01]{7}$/
-//        scope.r01 = "00000000 11111111";
-//        scope.r10 = "00000000 11111111";
-//        scope.r11 = "00000000 11111111";
+        scope.r01 = "00000000 11111111";
+        scope.r10 = "00000000 11111111";
+        scope.r11 = "00000000 11111111";
 
         //Akku ADD akku schould be 00000000 00000000
 //        scope.r00 = "00000000 00000000";
@@ -100,6 +100,30 @@ describe('Controller: MainCtrl', function () {
         scope.speicherWert = 10;
         scope.storeValue(500);
         expect(scope.get_memory(500, 502)).toEqual(["00000000", "00001010"]);
+    });
+
+    it('should logically shift right', function(){
+        scope.r00 = "00000000 00001111";
+        scope.instructionRegister = "00001001 10000000"; // SRL
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000111");
+        expect(scope.carryBit).toBe(true);
+        // negative value
+        scope.r00 = "11111111 10011100";  // -100
+        scope._interpret();
+        expect(scope.r00).toEqual("01111111 11001110");
+        expect(scope.carryBit).toBe(false);
+    });
+    it('should logically shift left', function(){
+        scope.r00 = "00000000 00001111";
+        scope.instructionRegister = "00001100 10000000"; // SLL
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00011110");
+        expect(scope.carryBit).toBe(false);
+        scope.r00 = "11111111 10011100";  // -100
+        scope._interpret();
+        expect(scope.r00).toEqual("11111111 00111000");
+        expect(scope.carryBit).toBe(true);
     });
 
 });

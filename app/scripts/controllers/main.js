@@ -61,8 +61,15 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                 //$scope.r00 = $sysconv.binten($sysconv.bininputtobin($scope.r00));
             }},
             {"name": "SRL Rnr", "regex": /^00001001[01]{8}$/, "assemblerFunction": function(matches) {
+                var bin = $sysconv.bininputtobin($scope.r00);
+                $scope.carryBit = bin.pop();
+                $scope.r00 = $sysconv.binarray2word(bin);
             }},
-            {"name": "SLL Rnr", "regex": /^00001101[01]{8}$/, "assemblerFunction": function(matches) {
+            {"name": "SLL Rnr", "regex": /^00001100[01]{8}$/, "assemblerFunction": function(matches) {
+                var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), 16);
+                $scope.carryBit = bin.shift();
+                bin.push(false);
+                $scope.r00 = $sysconv.bintobinoutput(bin);
             }},
 
             {"name": "AND Rnr", "regex": /^0000[01]{2}100[01]{7}$/, "assemblerFunction": function(matches) {
