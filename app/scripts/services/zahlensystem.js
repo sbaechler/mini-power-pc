@@ -1,6 +1,6 @@
 // view-source:http://manderc.manderby.com/concepts/umrechner/index.php
 angular.module('sysconvProvider', [], function($provide){
-  $provide.factory('$sysconv', function(){
+  $provide.factory('$sysconv', [function(){
 
   return {
     // Removes all prefixing zeros from the binary array.
@@ -265,7 +265,8 @@ angular.module('sysconvProvider', [], function($provide){
         } else {
             var bin = this.bininputtobin(twoscomplement);
             bin = this.binaddone(this.onescomplement(bin));
-            return this.bintodecoutput(bin) * -1;
+            var dec = this.bintodecoutput(bin).replace(/\s/g, '');
+            return parseInt(dec) * -1;
         }
     },
 
@@ -281,11 +282,13 @@ angular.module('sysconvProvider', [], function($provide){
     },
     // convert a binary String to decimal
     bin2dec: function(bininput){
-        return this.bintodecoutput(this.bininputtobin(bininput));
+        return parseInt(this.bintodecoutput(this.bininputtobin(bininput))
+                                                .replace(/\s/g, ''));
     },
     // converts a binary array to 16 bit
     binarray2word: function(bin){
         return this.bintobinoutput(this.bintruncate(bin, 16));
     }
   }
-});});
+}]);
+});
