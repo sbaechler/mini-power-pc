@@ -62,33 +62,62 @@ describe('Controller: MainCtrl', function () {
         scope.r11 = "00000000 11111111";
 
         //Akku ADD akku schould be 00000000 00000000
-//        scope.r00 = "00000000 00000000";
-//        scope.instructionRegister = "00000011 10000000";
-//        scope._interpret();
-//        expect(scope.r00).toEqual("00000000 00000000");
+        scope.r00 = "00000000 00000000";
+        scope.instructionRegister = "00000011 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000000");
 
-//        scope.r00 = "00000000 00000000";
-//        scope.instructionRegister = "00000111 10000000";
-//        scope._interpret();
-//        expect(scope.r01).toEqual("00000000 11111111");
-//
-//        scope.r00 = "00000000 00000000";
-//        scope.instructionRegister = "00001011 10000000";
-//        scope._interpret();
-//        expect(scope.r10).toEqual("00000000 11111111");
-//
-//        scope.r00 = "00000000 00000000";
-//        scope.instructionRegister = "00001111 10000000";
-//        scope._interpret();
-//        expect(scope.r11).toEqual("00000000 11111111");
-//
-//        scope.r00 = "11111111 11111111";
-//        scope.r11 = "11111111 11111111";
-//        scope.instructionRegister = "00001111 10000000";
-//        scope._interpret();
+        scope.r00 = "00000000 00000000";
+        scope.instructionRegister = "00000111 10000000";
+        scope._interpret();
+        expect(scope.r01).toEqual("00000000 11111111");
+
+        scope.r00 = "00000000 00000000";
+        scope.instructionRegister = "00001011 10000000";
+        scope._interpret();
+        expect(scope.r10).toEqual("00000000 11111111");
+
+        scope.r00 = "00000000 00000000";
+        scope.instructionRegister = "00001111 10000000";
+        scope._interpret();
+        expect(scope.r11).toEqual("00000000 11111111");
+
+        scope.r00 = "11111111 11111111";
+        scope.r11 = "11111111 11111111";
+        scope.instructionRegister = "00001111 10000000";
+        scope._interpret();
         //TODO
         //expect(scope.r11).toEqual("00000000 11111111");
 
+    });
+
+   //test LWDD Rnr, #Adr
+   // it('Mnemonic LWDD Rnr, #Adr test', function(){
+     //   scope.r00 = "00000000 00000000";
+     //   _$memory_.setWord("500", "00000000 11111110");
+    //   scope.instructionRegister = "01010000 11111110";
+    //    scope._interpret();
+    //    expect(scope.r00).toEqual("00000000 11111110");
+
+
+    //});
+
+    //test SLA
+    it('Mnemonic SLA test', function(){
+        scope.r00 = "00000000 00000000";
+        scope.instructionRegister = "00001000 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000000");
+
+        scope.r00 = "00000000 00000010";
+        scope.instructionRegister = "00001000 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000100");
+
+        scope.r00 = "00000000 00000011";
+        scope.instructionRegister = "00001000 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000110");
     });
 
     it("should store numbers as string in memory", function(){
