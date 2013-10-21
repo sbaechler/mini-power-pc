@@ -103,39 +103,39 @@ describe('Controller: MainCtrl', function () {
     //});
 
     //test SLA
-    it('Mnemonic SLA test', function(){
-        scope.r00 = "00000000 00000000";
-        scope.carryBit = true;
-        scope.instructionRegister = "00001000 10000000";
-        scope._interpret();
-        expect(scope.r00).toEqual("00000000 00000000");
-        expect(scope.carryBit).toBe(false);
-
-        scope.r00 = "00000000 00000010";
-        scope.carryBit = true;
-        scope.instructionRegister = "00001000 10000000";
-        scope._interpret();
-        expect(scope.r00).toEqual("00000000 00000100");
-        expect(scope.carryBit).toBe(false);
-
-        scope.r00 = "00000000 00000011";
-        scope.instructionRegister = "00001000 10000000";
-        scope._interpret();
-        expect(scope.r00).toEqual("00000000 00000110");
-        expect(scope.carryBit).toBe(false);
-
-        scope.r00 = "11111111 11001110";  // -50
-        scope.instructionRegister = "00001000 10000000";
-        scope._interpret();
-        expect(scope.r00).toEqual("11111111 10011100");
-        expect(scope.carryBit).toBe(true);
-
-        scope.r00 = "11000001 10000000";  // -16 000
-        scope.instructionRegister = "00001000 10000000";
-        scope._interpret();
-        expect(scope.r00).toEqual("10000011 00000000");
-        expect(scope.carryBit).toBe(true);
-    });
+//    it('Mnemonic SLA test', function(){
+//        scope.r00 = "00000000 00000000";
+//        scope.carryBit = true;
+//        scope.instructionRegister = "00001000 10000000";
+//        scope._interpret();
+//        expect(scope.r00).toEqual("00000000 00000000");
+//        expect(scope.carryBit).toBe(false);
+//
+//        scope.r00 = "00000000 00000010";
+//        scope.carryBit = true;
+//        scope.instructionRegister = "00001000 10000000";
+//        scope._interpret();
+//        expect(scope.r00).toEqual("00000000 00000100");
+//        expect(scope.carryBit).toBe(false);
+//
+//        scope.r00 = "00000000 00000011";
+//        scope.instructionRegister = "00001000 10000000";
+//        scope._interpret();
+//        expect(scope.r00).toEqual("00000000 00000110");
+//        expect(scope.carryBit).toBe(false);
+//
+//        scope.r00 = "11111111 11001110";  // -50
+//        scope.instructionRegister = "00001000 10000000";
+//        scope._interpret();
+//        expect(scope.r00).toEqual("11111111 10011100");
+//        expect(scope.carryBit).toBe(true);
+//
+//        scope.r00 = "11000001 10000000";  // -16 000
+//        scope.instructionRegister = "00001000 10000000";
+//        scope._interpret();
+//        expect(scope.r00).toEqual("10000011 00000000");
+//        expect(scope.carryBit).toBe(true);
+//    });
 
     it("should store numbers as string in memory", function(){
         scope.speicherWert = "10";
@@ -170,6 +170,40 @@ describe('Controller: MainCtrl', function () {
         scope._interpret();
         expect(scope.r00).toEqual("11111111 00111000");
         expect(scope.carryBit).toBe(true);
+    });
+    it('Mnemonic SRA test', function(){
+        scope.r00 = "00000000 00000000";
+        scope.carryBit = true;
+        scope.instructionRegister = "00000101 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000000");
+        expect(scope.carryBit).toBe(false);
+
+        scope.r00 = "00000000 00000010";
+        scope.carryBit = true;
+        scope.instructionRegister = "00000101 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000001");
+        expect(scope.carryBit).toBe(false);
+
+        scope.r00 = "00000000 00000011";
+        scope.carryBit = false;
+        scope.instructionRegister = "00000101 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00000001");
+        expect(scope.carryBit).toBe(true);
+
+        scope.r00 = "11111111 10011100";  // -100
+        scope.instructionRegister = "00000101 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("11111111 11001110"); // -50
+        expect(scope.carryBit).toBe(false);
+
+        scope.r00 = "10000011 00000000";  // -32 000
+        scope.instructionRegister = "00000101 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("11000001 10000000"); // -16 000
+        expect(scope.carryBit).toBe(false);
     });
 
 });
