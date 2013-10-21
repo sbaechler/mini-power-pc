@@ -13,7 +13,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
         $scope.speicherWert = null; // Temp. Variable bei Direkteingabe von Werten.
         $scope.instructionCounter = 100;
         $scope.instructionRegister = null;
-        $scope.carryBit = 0;
+        $scope.carryBit = false;
         $scope.assemblerCommands =  [
             {"name": "CLR Rnr", "regex": /^0000([01]{2})101[01]{7}$/, "assemblerFunction": function(matches) {
                     $scope['r'+matches[1]] = "00000000 00000000";
