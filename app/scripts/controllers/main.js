@@ -20,12 +20,12 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                 }},
 
             {"name": "ADD Rnr", "regex": /^0000([01]{2})111[01]{7}$/, "assemblerFunction": function(matches) {
-                    var regValue = $sysconv.bintodecoutput($scope['r'+matches[1]]);
-                    var akkuValue = $sysconv.bintodecoutput($scope.r00);
-                    var result = regValue+akkuValue;
-
-                    $scope.r00 = $sysconv.decinputtobin(result);
-                }},
+                var regValue = $sysconv.bininputtobin($scope['r'+matches[1]]);
+                var akkuValue = $sysconv.bininputtobin($scope.r00);
+                var result = $sysconv.binadd(regValue, akkuValue);
+                $scope.r00 = $sysconv.binarray2word(result);
+                }
+            },
 
             {"name": "ADDD #Zahl", "regex": /^1([01]{15})$/,  "assemblerFunction": function(matches) {
                 var akkuValue = $sysconv.bininputtobin($scope.r00);
@@ -48,13 +48,13 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
             }},
 
 
-
-
             {"name": "SWDD Rnr, #Adr", "regex": /^011[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
                    var regValue = $scope['r'+matches[1]];
                    var address = $sysconv.bin2dec(matches[2]);
                    $memory.setWord(address, regValue);
             }},
+
+
             {"name": "SRA", "regex": /^00000101[01]{8}$/, "assemblerFunction": function(matches) {
             }},
             {"name": "SLA", "regex": /^00001000[01]{8}$/,"assemblerFunction": function(matches) {
@@ -150,10 +150,8 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
             {
                 var regex = this.assemblerCommands[i].regex;
                 if(instruction.match(regex)){
-                    // console.log("Assemblercode: "+this.assemblerCommands[i].name+"-"+regex);
                     var matches = regex.exec(instruction);
                     this.assemblerCommands[i].assemblerFunction(matches);
-                    // console.log(matches);
                     break;
                 }
             }
