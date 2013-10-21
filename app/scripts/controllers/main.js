@@ -1,5 +1,6 @@
 'use strict';
-var miniPowerPCControllers = angular.module('miniPowerPCControllers', []);
+var miniPowerPCControllers = angular.module('miniPowerPCControllers',
+                                            ['sysconvProvider', 'memoryProvider']);
 
 miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
     function MainCtrl($scope, $memory, $sysconv) {
@@ -42,10 +43,11 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                 }},
 
             {"name": "LWDD Rnr, #Adr", "regex": /^010[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
-
                 var addrInDec = $sysconv.bin2dec(matches[2]);
                 $scope['r'+matches[1]] = $memory.getWord(addrInDec);
             }},
+
+
 
 
             {"name": "SWDD Rnr, #Adr", "regex": /^011[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
@@ -139,7 +141,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
             this.updateUI();
         }
         $scope.storeValue = function(addr){
-            $memory.setDecimal(addr, this.speicherWert);
+            $memory.setDecimal(addr, this.speicherWert.toString());
         }
         $scope._interpret = function(){
             var instruction = this.instructionRegister.replace(" ", "");
@@ -148,10 +150,10 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
             {
                 var regex = this.assemblerCommands[i].regex;
                 if(instruction.match(regex)){
-                    console.log("Assemblercode: "+this.assemblerCommands[i].name+"-"+regex);
+                    // console.log("Assemblercode: "+this.assemblerCommands[i].name+"-"+regex);
                     var matches = regex.exec(instruction);
                     this.assemblerCommands[i].assemblerFunction(matches);
-                    console.log(matches);
+                    // console.log(matches);
                     break;
                 }
             }
