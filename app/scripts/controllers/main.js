@@ -153,7 +153,9 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
             this.updateUI();
         }
         $scope.storeValue = function(addr){
-            $memory.setDecimal(addr, this.speicherWert.toString());
+            try {
+                $memory.setDecimal(addr, this.speicherWert.toString());
+            } catch(ValueError) {}  // Kommt bei der Eingabe des Minus
         }
         $scope._interpret = function(){
             var instruction = this.instructionRegister.replace(" ", "");
