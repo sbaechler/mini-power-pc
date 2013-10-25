@@ -80,7 +80,10 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                 $scope.r00 = $sysconv.bintobinoutput(bin);
             }},
 
-            {"name": "AND Rnr", "regex": /^0000[01]{2}100[01]{7}$/, "assemblerFunction": function(matches) {
+            {"name": "AND Rnr", "regex": /^0000([01]{2})100[01]{7}$/, "assemblerFunction": function(matches) {
+                var bin1 = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), 16);
+                var bin2 = $sysconv.bintruncate($sysconv.bininputtobin($scope['r'+matches[1]]), 16);
+                $scope.r00 = $sysconv.binarray2word($sysconv.binadd(bin1, bin2));
             }},
             {"name": "OR Rnr", "regex": /^0000[01]{2}110[01]{7}$/, "assemblerFunction": function(matches) {
             }},

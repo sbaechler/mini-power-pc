@@ -35,7 +35,8 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
             "LWDD 01 500",
             "ADD 01",
             "SWDD 00 506"].join("\n")
-        }
+        },
+        {'name': 'Speicher 500 * Speicher 502', code: ""}
     ];
     $scope.fillProgram = function(value){
         if (value){
