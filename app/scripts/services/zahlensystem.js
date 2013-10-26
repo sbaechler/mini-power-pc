@@ -288,6 +288,16 @@ angular.module('sysconvProvider', [], function($provide){
     // converts a binary array to 16 bit
     binarray2word: function(bin){
         return this.bintobinoutput(this.bintruncate(bin, 16));
+    },
+    // checks if two binary arrays of the same length would overflow if added.
+    willOverflow: function(bin1, bin2){
+        if(bin1[0]&&bin2[0]&&!bin1[1]&&!bin2[1]) {
+            return true;  // Beide Zahlen negativ und 15 Bit
+        } else if(!bin1[0]&&!bin2[0]&&bin1[1]&&bin2[1]) {
+            return true;  // Beide Zahlen positiv und 15 Bit
+        } else {
+            return false;
+        }
     }
   }
 }]);

@@ -9,6 +9,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
         var WORDLENGTH = 16;
         $rootScope.WORDLENGTH = WORDLENGTH;
+        $scope.stop = false;
         $scope.r00 = null;  // Akku
         $scope.r01 = null;  // R01
         $scope.r10 = null;  // R02
@@ -20,25 +21,29 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         $scope.assemblerCommands =  [
             {"name": "CLR Rnr", "regex": /^0000([01]{2})101[01]{7}$/, "assemblerFunction": function(matches) {
                     $scope['r'+matches[1]] = "00000000 00000000";
+                    $scope.carryBit = false;
                 }},
 
             {"name": "ADD Rnr", "regex": /^0000([01]{2})111[01]{7}$/, "assemblerFunction": function(matches) {
-                var regValue = $sysconv.bininputtobin($scope['r'+matches[1]]);
-                var akkuValue = $sysconv.bininputtobin($scope.r00);
-                var result = $sysconv.binadd(regValue, akkuValue);
+                var bin1 = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
+                var bin2 = $sysconv.bintruncate($sysconv.bininputtobin($scope['r'+matches[1]]), WORDLENGTH);
+                var result = $sysconv.bintruncate($sysconv.binadd(bin1, bin2), WORDLENGTH);
+                $scope.carryBit = bin1[0]==bin2[0] && bin1[0]!=result[0];
                 $scope.r00 = $sysconv.binarray2word(result);
                 }
             },
 
             {"name": "ADDD #Zahl", "regex": /^1([01]{15})$/,  "assemblerFunction": function(matches) {
-                var akkuValue = $sysconv.bininputtobin($scope.r00);
-                var zahl = $sysconv.bininputtobin(matches[1]);
-                var result = $sysconv.binadd(akkuValue, zahl);
+                var bin1 = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
+                var bin2 = $sysconv.bintruncate($sysconv.bininputtobin(matches[1]), 15);
+                bin2.unshift(bin2[0]);  // copy first element
+                var result = $sysconv.bintruncate($sysconv.binadd(bin1, bin2), WORDLENGTH);
+                $scope.carryBit = bin1[0]==bin2[0] && bin1[0]!=result[0];
                 $scope.r00 = $sysconv.binarray2word(result);
                 }
             },
 
-            {"name": "INC", "regex": /^00000001[01]{8}$/, "assemblerFunction": function(matches) {
+            {"name": "INC", "regex": /^00000001[01]{8}$/, "assemblerFunction": function() {
                 $scope.r00 = $sysconv.binarray2word($sysconv.binaddone(
                 $sysconv.bininputtobin($scope.r00)));
                 }},
@@ -58,25 +63,25 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
             }},
 
 
-            {"name": "SRA", "regex": /^00000101[01]{8}$/, "assemblerFunction": function(matches) {
+            {"name": "SRA", "regex": /^00000101[01]{8}$/, "assemblerFunction": function() {
                 var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 $scope.carryBit = bin.pop();
                 bin.unshift(bin[0]);  // copy first element
                 $scope.r00 = $sysconv.binarray2word(bin);
             }},
-            {"name": "SLA", "regex": /^00001000[01]{8}$/,"assemblerFunction": function(matches) {
+            {"name": "SLA", "regex": /^00001000[01]{8}$/,"assemblerFunction": function() {
                 var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 $scope.carryBit = bin[1];
                 bin.shift();
                 bin.push(false);
                 $scope.r00 = $sysconv.binarray2word(bin);
             }},
-            {"name": "SRL Rnr", "regex": /^00001001[01]{8}$/, "assemblerFunction": function(matches) {
+            {"name": "SRL Rnr", "regex": /^00001001[01]{8}$/, "assemblerFunction": function() {
                 var bin = $sysconv.bininputtobin($scope.r00);
                 $scope.carryBit = bin.pop();
                 $scope.r00 = $sysconv.binarray2word(bin);
             }},
-            {"name": "SLL Rnr", "regex": /^00001100[01]{8}$/, "assemblerFunction": function(matches) {
+            {"name": "SLL Rnr", "regex": /^00001100[01]{8}$/, "assemblerFunction": function() {
                 var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 $scope.carryBit = bin.shift();
                 bin.push(false);
@@ -101,7 +106,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                 }
                 $scope.r00 = $sysconv.binarray2word(result);
             }},
-            {"name": "NOT", "regex": /^000000001[01]{7}$/, "assemblerFunction": function(matches) {
+            {"name": "NOT", "regex": /^000000001[01]{7}$/, "assemblerFunction": function() {
                 var bin1 = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 $scope.r00 = $sysconv.binarray2word($sysconv.onescomplement(bin1));
             }},
@@ -116,21 +121,40 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                     $scope.instructionCounter = $scope['r'+matches[1]];
                 }
             }},
-            {"name": "BC Rnr", "regex": /^0001([01]{2})11[01]{7}$/, "assemblerFunction": function(matches) {
+            {"name": "BC Rnr", "regex": /^0001([01]{2})11[01]{8}$/, "assemblerFunction": function(matches) {
+                if($scope.carryBit) {
+                    $scope.instructionCounter = $scope['r'+matches[1]];
+                }
             }},
-            {"name": "B Rnr", "regex": /^0001([01]{2})00[01]{7}$/, "assemblerFunction": function(matches) {
-            }},
-
-            {"name": "BZD #Adr", "regex": /^00110[01]{1}([01]{11})$/, "assemblerFunction": function(matches) {
-            }},
-            {"name": "BNZD #Adr", "regex": /^00101[01]{1}([01]{11})$/,"assemblerFunction": function(matches) {
-            }},
-            {"name": "BCD #Adr", "regex": /^00111[01]{1}([01]{11})$/, "assemblerFunction": function(matches) {
-            }},
-            {"name": "BD #Adr", "regex": /^00100[01]{1}([01]{11})$/, "assemblerFunction": function(matches) {
+            {"name": "B Rnr", "regex": /^0001([01]{2})00[01]{8}$/, "assemblerFunction": function(matches) {
+                $scope.instructionCounter = $scope['r'+matches[1]];
             }},
 
-            {"name": "END", "regex": "/^[0-1]{1}$/","assemblerFunction": function(matches) {
+            {"name": "BZD #Adr", "regex": /^00110[01]([01]{10})$/, "assemblerFunction": function(matches) {
+                if($scope.r00 === "00000000 00000000") {
+                    $scope.instructionCounter = $sysconv.binarray2word(
+                        $sysconv.bininputtobin(matches[1]));
+                }
+            }},
+            {"name": "BNZD #Adr", "regex": /^00101[01]([01]{10})$/,"assemblerFunction": function(matches) {
+                if($scope.r00 !== "00000000 00000000") {
+                    $scope.instructionCounter = $sysconv.binarray2word(
+                        $sysconv.bininputtobin(matches[1]));
+                }
+            }},
+            {"name": "BCD #Adr", "regex": /^00111[01]([01]{10})$/, "assemblerFunction": function(matches) {
+                if($scope.carryBit) {
+                    $scope.instructionCounter = $sysconv.binarray2word(
+                        $sysconv.bininputtobin(matches[1]));
+                }
+            }},
+            {"name": "BD #Adr", "regex": /^00100[01]([01]{10})$/, "assemblerFunction": function(matches) {
+                $scope.instructionCounter = $sysconv.binarray2word(
+                        $sysconv.bininputtobin(matches[1]));
+            }},
+
+            {"name": "END", "regex": /^0{16}$/, "assemblerFunction": function() {
+                $scope.stop = true;
             }}
         ];
         $scope.get_memory = function(start, end){
@@ -158,18 +182,21 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                 };
         $scope.updateUI();
         $scope.step = function(){
-            // Befehl auslesen
-            this._get_instruction();
-            // Ev. Befehlszähler erhöhen. (Wenn kein Sprung)
-            this.instructionCounter += 2;
-            // Befehl interpretieren
-            this._interpret();
-            // Resultat in Speicher schreiben
-            this.executionCounter += 1;
-            this.updateUI();
+            if(!$scope.stop) {
+                // Befehl auslesen
+                this._get_instruction();
+                // Ev. Befehlszähler erhöhen. (Wenn kein Sprung)
+                this.instructionCounter += 2;
+                // Befehl interpretieren
+                this._interpret();
+                // Resultat in Speicher schreiben
+                this.executionCounter += 1;
+                this.updateUI();
+            }
         };
         $memory.listen($scope.updateUI);
         $scope.reset = function(){
+            this.stop = false;
             this.instructionCounter = 100;
             this.executionCounter = 0;
             $memory.wipe();
