@@ -34,7 +34,8 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
             "SLA",
             "LWDD 01 500",
             "ADD 01",
-            "SWDD 00 506"].join("\n")
+            "SWDD 00 506",
+            "END"].join("\n")
         },
         {'name': 'Speicher 500 * Speicher 502', code: ""}
     ];

@@ -6,18 +6,20 @@
   <div class="col-sm-4">
     <button type="button" ng-click="reset()" class="btn btn-danger">Reset</button><p></p>
     <h2>Register</h2>
-    <table class="table table-bordered">
-      <tr><th>Befehlszähler</th><td>{{instructionCounter}}</td><td></td></tr>
-      <tr><th>Befehlsregister</th><td>{{instructionRegister}}</td><td></td></tr>
-      <tr><th>Carry-Bit</th><td>{{carryBit}}</td><td></td></tr>
-      <tr><th>Akkumulator</th><td>{{r00}}</td><td>{{r00|binToDec}}</td></tr>
-      <tr><th>Reg-1</th><td>{{r01}}</td><td>{{r01|binToDec}}</td></tr>
-      <tr><th>Reg-2</th><td>{{r10}}</td><td>{{r10|binToDec}}</td></tr>
-      <tr><th>Reg-3</th><td>{{r11}}</td><td>{{r11|binToDec}}</td></tr>
-    </table>
-    <table class="table table-bordered">
-      <tr><th>Ausgeführte Befehle</th><td>{{executionCounter}}</td></tr>
-    </table>
+    <div class="well">
+      <table class="table table-bordered">
+        <tr><th>Befehlszähler</th><td>{{instructionCounter}}</td><td></td></tr>
+        <tr><th>Befehlsregister</th><td>{{instructionRegister}}</td><td></td></tr>
+        <tr><th>Carry-Bit</th><td>{{carryBit}}</td><td><span ng-class="{hidden: !carryBit}" class="glyphicon glyphicon-exclamation-sign"</span></td></tr>
+        <tr><th>Akkumulator</th><td>{{r00}}</td><td>{{r00|binToDec}}</td></tr>
+        <tr><th>Reg-1</th><td>{{r01}}</td><td>{{r01|binToDec}}</td></tr>
+        <tr><th>Reg-2</th><td>{{r10}}</td><td>{{r10|binToDec}}</td></tr>
+        <tr><th>Reg-3</th><td>{{r11}}</td><td>{{r11|binToDec}}</td></tr>
+      </table>
+      <table class="table table-bordered">
+        <tr><th>Ausgeführte Befehle</th><td>{{executionCounter}}</td></tr>
+      </table>
+    </div>
   </div>
 
   <div class="col-sm-4" ng-controller="LoaderCtrl">
@@ -38,11 +40,11 @@
     </div>
     <h2>Programm</h2>
     <div>
-      <div class="scrolling-wrapper">
+      <div class="scrolling-wrapper well">
         <!-- Der aktuell ausgeführte Befehl -5 + 10 Befehle -->
         <table class="table table-bordered">
           <tr ng-repeat="cell in currentSteps track by cell.index" class="{{cell.class}}">
-            <th>{{cell.index}}</th><td>{{cell.value}}</td>
+            <th width="50">{{cell.index}}</th><td>{{cell.value}}</td>
           </tr>
         </table>
       </div>
@@ -50,16 +52,16 @@
   </div>
 
   <div class="col-sm-4">
-    <div class="btn-group">
-      <button type="button" ng-click="step()" class="btn btn-default"><span class="glyphicon glyphicon-step-forward"></span> Step</button>
-      <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-play"></span> Slow</button>
-      <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-fast-forward"></span> Fast</button>
+    <div class="btn-group" ng-class="{stop: stop}">
+      <button type="button" ng-disabled="stop" ng-click="step()" class="btn btn-default"><span class="glyphicon glyphicon-step-forward"></span> Step</button>
+      <button type="button" ng-disabled="stop" class="btn btn-default"><span class="glyphicon glyphicon-play"></span> Slow</button>
+      <button type="button" ng-disabled="stop" class="btn btn-default"><span class="glyphicon glyphicon-fast-forward"></span> Fast</button>
     </div><p></p>
     <h2>Datenspeicher</h2>
-    <div class="scrolling-wrapper">
+    <div class="scrolling-wrapper well">
       <table class="table table-bordered memory-table">
         <tr ng-repeat="cell in get_memory(500,530) track by $index">
-          <th>{{$index+500}}</th><td>{{cell}}</td><td style="width: 6em;"><input type="text" ng-Pattern="/^-?\d+$/"
+          <th width="50">{{$index+500}}</th><td>{{cell}}</td><td style="width: 6em;"><input type="text" ng-Pattern="/^-?\d+$/"
                 ng-model="speicherWert" initial="{{getDecimal($index+500)}}"
                 ng-maxlength="6" ng-change="storeValue($index+500)" style="width: 6em;" class="display_{{$even}}"></td>
         </tr>
