@@ -106,9 +106,15 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                 $scope.r00 = $sysconv.binarray2word($sysconv.onescomplement(bin1));
             }},
 
-            {"name": "BZ Rnr", "regex": /^0001([01]{2})10[01]{7}$/, "assemblerFunction": function(matches) {
+            {"name": "BZ Rnr", "regex": /^0001([01]{2})10[01]{8}$/, "assemblerFunction": function(matches) {
+                if($scope.r00 === "00000000 00000000") {
+                    $scope.instructionCounter = $scope['r'+matches[1]];
+                }
             }},
-            {"name": "BNZ Rne", "regex": /^0001([01]{2})01[01]{7}$/, "assemblerFunction": function(matches) {
+            {"name": "BNZ Rne", "regex": /^0001([01]{2})01[01]{8}$/, "assemblerFunction": function(matches) {
+                if($scope.r00 !== "00000000 00000000") {
+                    $scope.instructionCounter = $scope['r'+matches[1]];
+                }
             }},
             {"name": "BC Rnr", "regex": /^0001([01]{2})11[01]{7}$/, "assemblerFunction": function(matches) {
             }},
@@ -154,13 +160,11 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         $scope.step = function(){
             // Befehl auslesen
             this._get_instruction();
-            // Befehl interpretieren
-            this._interpret();
-
-            // Resultat in Speicher schreiben
             // Ev. Befehlszähler erhöhen. (Wenn kein Sprung)
             this.instructionCounter += 2;
-
+            // Befehl interpretieren
+            this._interpret();
+            // Resultat in Speicher schreiben
             this.executionCounter += 1;
             this.updateUI();
         };

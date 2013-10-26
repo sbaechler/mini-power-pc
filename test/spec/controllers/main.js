@@ -235,5 +235,33 @@ describe('Controller: MainCtrl', function () {
         scope._interpret();
         expect(scope.r00).toEqual("10101010 11111111");
     });
+    it('can BZ', function(){
+       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.r00 = "00000000 00000000";
+       scope.r01 = "00000000 01111000"; // 120
+       scope.instructionRegister = "00010110 00000000";
+       scope._interpret();
+       expect(scope.instructionCounter).toEqual("00000000 01111000"); //120
+       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.r00 = "00000000 00000001";
+       scope.r01 = "00000000 01111000"; // 120
+       scope.instructionRegister = "00010110 00000000";
+       scope._interpret();
+       expect(scope.instructionCounter).toEqual("00000000 01100100"); //100
+    });
+    it('can BNZ', function(){
+       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.r00 = "00000000 00000000";
+       scope.r01 = "00000000 01111000"; // 120
+       scope.instructionRegister = "00010101 00000000";
+       scope._interpret();
+       expect(scope.instructionCounter).toEqual("00000000 01100100"); //100
+       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.r00 = "00000000 00000001";
+       scope.r01 = "00000000 01111000"; // 120
+       scope.instructionRegister = "00010101 00000000";
+       scope._interpret();
+       expect(scope.instructionCounter).toEqual("00000000 01111000"); //120
+    });
 
 });
