@@ -6,7 +6,7 @@ var miniPowerPCControllers = angular.module('miniPowerPCControllers',
 
 miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', '$rootScope',
     function MainCtrl($scope, $memory, $sysconv, $rootScope) {
-        console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
+        // console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
         var WORDLENGTH = 16;
         $rootScope.WORDLENGTH = WORDLENGTH;
         $scope.stop = false;
@@ -44,10 +44,19 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
             },
 
             {"name": "INC", "regex": /^00000001[01]{8}$/, "assemblerFunction": function() {
+                var msb = $scope.r00[0];
                 $scope.r00 = $sysconv.binarray2word($sysconv.binaddone(
-                $sysconv.bininputtobin($scope.r00)));
+                    $sysconv.bininputtobin($scope.r00)
+                ));
+                $scope.carryBit = msb==='0' && $scope.r00[0] === '1';
                 }},
             {"name": "DEC", "regex": /^00000100[01]{8}$/, "assemblerFunction": function(matches) {
+                var msb = $scope.r00[0];
+                var bin1 = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
+                var bin2 = $sysconv.dec2twoscomplement('-1', WORDLENGTH);
+                var result = $sysconv.bintruncate($sysconv.binadd(bin1, bin2), WORDLENGTH);
+                $scope.r00 = $sysconv.binarray2word(result);
+                $scope.carryBit = msb==='1' && $scope.r00[0] === '0';
                 }},
 
             {"name": "LWDD Rnr, #Adr", "regex": /^010[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {

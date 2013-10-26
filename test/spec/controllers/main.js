@@ -131,9 +131,43 @@ describe('Controller: MainCtrl', function () {
         scope._interpret();
         expect(scope.carryBit).toBe(true);
     });
+    it('can increment', function(){
+        scope.r00 = "00000000 00001010"; // 10
+        scope.instructionRegister = "00000001 00000001";
+        scope._interpret();
+        expect(scope.carryBit).toBe(false);
+        expect(scope.r00).toEqual("00000000 00001011"); //11
 
+        scope.r00 = "01111111 11111111";
+        scope.instructionRegister = "00000001 00000001";
+        scope._interpret();
+        expect(scope.carryBit).toBe(true);
 
+        scope.r00 = "11111111 11111111";  //-1
+        scope.instructionRegister = "00000001 00000001";
+        scope._interpret();
+        expect(scope.carryBit).toBe(false);
+        expect(scope.r00).toEqual("00000000 00000000");
+    });
 
+    it('can decrement', function(){
+        scope.r00 = "00000000 00001010"; // 10
+        scope.instructionRegister = "00000100 00000001";
+        scope._interpret();
+        expect(scope.carryBit).toBe(false);
+        expect(scope.r00).toEqual("00000000 00001001"); //9
+
+        scope.r00 = "10000000 00000000"; // -32768
+        scope.instructionRegister = "00000100 00000001";
+        scope._interpret();
+        expect(scope.carryBit).toBe(true);
+
+        scope.r00 = "00000000 00000000";
+        scope.instructionRegister = "00000100 00000001";
+        scope._interpret();
+        expect(scope.carryBit).toBe(false);
+        expect(scope.r00).toEqual("11111111 11111111");
+    });
 
     //test SLA
     it('Mnemonic SLA test', function(){
