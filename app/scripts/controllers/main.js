@@ -2,10 +2,13 @@
 var miniPowerPCControllers = angular.module('miniPowerPCControllers',
                                             ['sysconvProvider', 'memoryProvider']);
 
-miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
-    function MainCtrl($scope, $memory, $sysconv) {
-        console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
 
+
+miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', '$rootScope',
+    function MainCtrl($scope, $memory, $sysconv, $rootScope) {
+        console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
+        var WORDLENGTH = 16;
+        $rootScope.WORDLENGTH = WORDLENGTH;
         $scope.r00 = null;  // Akku
         $scope.r01 = null;  // R01
         $scope.r10 = null;  // R02
@@ -56,13 +59,13 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
 
 
             {"name": "SRA", "regex": /^00000101[01]{8}$/, "assemblerFunction": function(matches) {
-                var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), 16);
+                var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 $scope.carryBit = bin.pop();
                 bin.unshift(bin[0]);  // copy first element
                 $scope.r00 = $sysconv.binarray2word(bin);
             }},
             {"name": "SLA", "regex": /^00001000[01]{8}$/,"assemblerFunction": function(matches) {
-                var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), 16);
+                var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 $scope.carryBit = bin[1];
                 bin.shift();
                 bin.push(false);
@@ -74,7 +77,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
                 $scope.r00 = $sysconv.binarray2word(bin);
             }},
             {"name": "SLL Rnr", "regex": /^00001100[01]{8}$/, "assemblerFunction": function(matches) {
-                var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), 16);
+                var bin = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 $scope.carryBit = bin.shift();
                 bin.push(false);
                 $scope.r00 = $sysconv.bintobinoutput(bin);
@@ -82,8 +85,12 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv',
 
             {"name": "AND Rnr", "regex": /^0000([01]{2})100[01]{7}$/, "assemblerFunction": function(matches) {
                 var bin1 = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), 16);
-                var bin2 = $sysconv.bintruncate($sysconv.bininputtobin($scope['r'+matches[1]]), 16);
-                $scope.r00 = $sysconv.binarray2word($sysconv.binadd(bin1, bin2));
+                var bin2 = $sysconv.bintruncate($sysconv.bininputtobin($scope['r'+matches[1]]), WORDLENGTH);
+                var result = Array(WORDLENGTH);
+                for (var i=0; i< WORDLENGTH; i++){
+                    result[i] = bin1[i] && bin2[i];
+                }
+                $scope.r00 = $sysconv.binarray2word(result);
             }},
             {"name": "OR Rnr", "regex": /^0000[01]{2}110[01]{7}$/, "assemblerFunction": function(matches) {
             }},

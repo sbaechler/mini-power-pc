@@ -10,7 +10,6 @@ var miniPowerpcApp = angular.module('miniPowerpcApp', [
     'sysconvProvider'
 ]);
 
-
 miniPowerpcApp.config(['$routeProvider',
      function ($routeProvider) {
         $routeProvider
@@ -22,4 +21,5 @@ miniPowerpcApp.config(['$routeProvider',
             redirectTo: '/'
           });
   }]);
+
 

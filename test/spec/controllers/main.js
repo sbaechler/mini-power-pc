@@ -205,12 +205,17 @@ describe('Controller: MainCtrl', function () {
         expect(scope.r00).toEqual("11000001 10000000"); // -16 000
         expect(scope.carryBit).toBe(false);
     });
-    it('can binary ADD', function(){
+    it('can binary AND', function(){
         scope.r00 = "01010101 00000000";
         scope.r01 = "00101010 11111111";
         scope.instructionRegister = "00000110 00000000";
         scope._interpret();
-        expect(scope.r00).toEqual("01111111 11111111");
+        expect(scope.r00).toEqual("00000000 00000000");
+        scope.r00 = "11111111 11111111"; // -1
+        scope.r01 = "10101010 10101010"; // 1
+        scope.instructionRegister = "00000110 00000000";  // 0
+        scope._interpret();
+        expect(scope.r00).toEqual("10101010 10101010");
     });
 
 });
