@@ -217,5 +217,23 @@ describe('Controller: MainCtrl', function () {
         scope._interpret();
         expect(scope.r00).toEqual("10101010 10101010");
     });
+    it('can binary OR', function(){
+        scope.r00 = "01010101 00000000";
+        scope.r01 = "00101010 11111111";
+        scope.instructionRegister = "00000111 00000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("01111111 11111111");
+        scope.r00 = "00000000 11111111"; // -1
+        scope.r01 = "10101010 10101010"; // 1
+        scope.instructionRegister = "00000111 00000000";  // 0
+        scope._interpret();
+        expect(scope.r00).toEqual("10101010 11111111");
+    });
+    it('can binary NOT', function(){
+        scope.r00 = "01010101 00000000";
+        scope.instructionRegister = "00000000 10000000";
+        scope._interpret();
+        expect(scope.r00).toEqual("10101010 11111111");
+    });
 
 });
