@@ -317,95 +317,95 @@ describe('Controller: MainCtrl', function () {
         expect(scope.r00).toEqual("10101010 11111111");
     });
     it('can BZ', function(){
-       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.instructionCounter = 100; // 100
        scope.r00 = "00000000 00000000";
        scope.r01 = "00000000 01111000"; // 120
        scope.instructionRegister = "00010110 00000000";
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01111000"); //120
-       scope.instructionCounter = "00000000 01100100"; // 100
+       expect(scope.instructionCounter).toBe(120); //120
+       scope.instructionCounter = 100; // 100
        scope.r00 = "00000000 00000001";
        scope.r01 = "00000000 01111000"; // 120
        scope.instructionRegister = "00010110 00000000";
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01100100"); //100
+       expect(scope.instructionCounter).toEqual(100); //100
     });
     it('can BNZ', function(){
-       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.instructionCounter = 100; // 100
        scope.r00 = "00000000 00000000";
        scope.r01 = "00000000 01111000"; // 120
        scope.instructionRegister = "00010101 00000000";
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01100100"); //100
-       scope.instructionCounter = "00000000 01100100"; // 100
+       expect(scope.instructionCounter).toEqual(100); //100
+       scope.instructionCounter = 100; // 100
        scope.r00 = "00000000 00000001";
        scope.r01 = "00000000 01111000"; // 120
        scope.instructionRegister = "00010101 00000000";
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01111000"); //120
+       expect(scope.instructionCounter).toEqual(120); //120
     });
     it('can BC', function(){
-       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.instructionCounter = 100; // 100
        scope.r01 = "00000000 01111000"; // 120
        scope.carryBit = true;
        scope.instructionRegister = "00010111 00000000";
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01111000"); // 120
-       scope.instructionCounter = "00000000 01100100"; // 100
+       expect(scope.instructionCounter).toEqual(120); // 120
+       scope.instructionCounter = 100; // 100
        scope.r01 = "00000000 01111000"; // 120
        scope.carryBit = false;
        scope.instructionRegister = "00010111 00000000";
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01100100"); // 100
+       expect(scope.instructionCounter).toEqual(100); // 100
     });
     it('can B', function(){
-       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.instructionCounter = 100; // 100
        scope.r01 = "00000000 01111000"; // 120
        scope.instructionRegister = "00010100 00000000";
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01111000"); // 120
+       expect(scope.instructionCounter).toEqual(120); // 120
     });
     it('can BZD', function(){
-       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.instructionCounter = 100; // 100
        scope.r00 = "00000000 00000000";
        scope.instructionRegister = "00110000 01111000"; //BZD 120
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01111000"); // 120
-       scope.instructionCounter = "00000000 01100100"; // 100
+       expect(scope.instructionCounter).toEqual(120); // 120
+       scope.instructionCounter = 100; // 100
        scope.r00 = "00000000 00000001";
        scope.instructionRegister = "00110000 01111000"; //BZD 120
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01100100"); // 100
+       expect(scope.instructionCounter).toEqual(100); // 100
     });
     it('can BNZD', function(){
-       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.instructionCounter = 100; // 100
        scope.r00 = "00000000 00000001";
        scope.instructionRegister = "00101000 01111000"; //BNZD 120
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01111000"); // 120
-       scope.instructionCounter = "00000000 01100100"; // 100
+       expect(scope.instructionCounter).toEqual(120); // 120
+       scope.instructionCounter = 100; // 100
        scope.r00 = "00000000 00000000";
        scope.instructionRegister = "00101000 01111000"; //BNZD 120
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01100100"); // 100
+       expect(scope.instructionCounter).toEqual(100); // 100
     });
     it('can BCD', function(){
-       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.instructionCounter = 100; // 100
        scope.carryBit = true
        scope.instructionRegister = "00111000 01111000"; //BCD 120
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01111000"); // 120
-       scope.instructionCounter = "00000000 01100100"; // 100
+       expect(scope.instructionCounter).toEqual(120); // 120
+       scope.instructionCounter = 100; // 100
        scope.carryBit = false
        scope.instructionRegister = "00111000 01111000"; //BCD 120
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01100100"); // 100
+       expect(scope.instructionCounter).toEqual(100); // 100
     });
     it('can BD', function(){
-       scope.instructionCounter = "00000000 01100100"; // 100
+       scope.instructionCounter = 100; // 100
        scope.instructionRegister = "00100000 01111000"; //BD 120
        scope._interpret();
-       expect(scope.instructionCounter).toEqual("00000000 01111000"); // 120
+       expect(scope.instructionCounter).toEqual(120); // 120
     });
     it('can END', function(){
        scope.stop = false;

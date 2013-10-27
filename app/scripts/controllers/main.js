@@ -122,44 +122,40 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
 
             {"name": "BZ Rnr", "regex": /^0001([01]{2})10[01]{8}$/, "assemblerFunction": function(matches) {
                 if($scope.r00 === "00000000 00000000") {
-                    $scope.instructionCounter = $scope['r'+matches[1]];
+                    $scope.instructionCounter = $sysconv.bin2dec($scope['r'+matches[1]]);
                 }
             }},
             {"name": "BNZ Rne", "regex": /^0001([01]{2})01[01]{8}$/, "assemblerFunction": function(matches) {
                 if($scope.r00 !== "00000000 00000000") {
-                    $scope.instructionCounter = $scope['r'+matches[1]];
+                    $scope.instructionCounter = $sysconv.bin2dec($scope['r'+matches[1]]);
                 }
             }},
             {"name": "BC Rnr", "regex": /^0001([01]{2})11[01]{8}$/, "assemblerFunction": function(matches) {
                 if($scope.carryBit) {
-                    $scope.instructionCounter = $scope['r'+matches[1]];
+                    $scope.instructionCounter = $sysconv.bin2dec($scope['r'+matches[1]]);
                 }
             }},
             {"name": "B Rnr", "regex": /^0001([01]{2})00[01]{8}$/, "assemblerFunction": function(matches) {
-                $scope.instructionCounter = $scope['r'+matches[1]];
+                $scope.instructionCounter = $sysconv.bin2dec($scope['r'+matches[1]]);
             }},
 
             {"name": "BZD #Adr", "regex": /^00110[01]([01]{10})$/, "assemblerFunction": function(matches) {
                 if($scope.r00 === "00000000 00000000") {
-                    $scope.instructionCounter = $sysconv.binarray2word(
-                        $sysconv.bininputtobin(matches[1]));
+                    $scope.instructionCounter =  $sysconv.bin2dec(matches[1]);
                 }
             }},
             {"name": "BNZD #Adr", "regex": /^00101[01]([01]{10})$/,"assemblerFunction": function(matches) {
                 if($scope.r00 !== "00000000 00000000") {
-                    $scope.instructionCounter = $sysconv.binarray2word(
-                        $sysconv.bininputtobin(matches[1]));
+                    $scope.instructionCounter = $sysconv.bin2dec(matches[1]);
                 }
             }},
             {"name": "BCD #Adr", "regex": /^00111[01]([01]{10})$/, "assemblerFunction": function(matches) {
                 if($scope.carryBit) {
-                    $scope.instructionCounter = $sysconv.binarray2word(
-                        $sysconv.bininputtobin(matches[1]));
+                    $scope.instructionCounter = $sysconv.bin2dec(matches[1]);
                 }
             }},
             {"name": "BD #Adr", "regex": /^00100[01]([01]{10})$/, "assemblerFunction": function(matches) {
-                $scope.instructionCounter = $sysconv.binarray2word(
-                        $sysconv.bininputtobin(matches[1]));
+                $scope.instructionCounter = $sysconv.bin2dec(matches[1]);
             }},
 
             {"name": "END", "regex": /^0{16}$/, "assemblerFunction": function() {
