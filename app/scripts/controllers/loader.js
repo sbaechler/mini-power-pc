@@ -43,7 +43,7 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
             'CLR 00',        // Akku löschen
             'ADDD 16',       // 16 in den Akku schreiben.
             'SWDD 00 510',   // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
-            'SWDD 01 504',   // Faktor a in Speicher #504 zwischenspeichern.
+            'SWDD 01 504',   // Speicher #504 löschen.
             'SWDD 01 506',  // Speicher #506 löschen.
 
             //mult:
@@ -58,23 +58,25 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
             'INC',             // Plus 1
             'SWDD 00 506',     // Abspeichern  #132
 
-            'LWDD 00 502',
+            'LWDD 00 502',      // Faktor b laden.
             'SLL',             // Das MSB von Faktor b ins Carry schreiben.
-            'BCD 142',          // Ist das Flag gesetzt: Faktor a Addieren.
-            'BD 156',            // If Teil überspringen
-            'LWDD 00 504',     // Faktor A zum Ergebnis addieren. //142
+            'SWDD 00 502',
+            'BCD 144',          // Ist das Flag gesetzt: Faktor a Addieren.
+            'BD 158',            // If Teil überspringen
+            'LWDD 00 504',     // Faktor A zum Ergebnis addieren. //144
             'ADD 10',          //
-            'BCD 150',         // Überlauf bei Lower: 1 zu upper addieren.
-            'BD 156',          // If Teil überspringen
+            'SWDD 00 504',      // Speichern
+            'BCD 154',         // Überlauf bei Lower: 1 zu upper addieren.
+            'BD 160',          // If Teil überspringen
             'LWDD 00 506',
-            'INC',             // 1 zu upper hinzufügen. #152
+            'INC',             // 1 zu upper hinzufügen. #156
             'SWDD 00 506',
 
             //noadd:
             'LWDD 00 510',
             'DEC',
             'SWDD 00 510',
-            'BNZD 114',    // #162
+            'BNZD 114',    // #164
             'END'
         ].join("\n")
         }

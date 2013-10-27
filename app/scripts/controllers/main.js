@@ -59,13 +59,13 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                 $scope.carryBit = msb==='1' && $scope.r00[0] === '0';
                 }},
 
-            {"name": "LWDD Rnr, #Adr", "regex": /^010[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
+            {"name": "LWDD Rnr, #Adr", "regex": /^010[01]([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
                 var addrInDec = $sysconv.bin2dec(matches[2]);
                 $scope['r'+matches[1]] = $memory.getWord(addrInDec);
             }},
 
 
-            {"name": "SWDD Rnr, #Adr", "regex": /^011[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
+            {"name": "SWDD Rnr, #Adr", "regex": /^011[01]([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
                    var regValue = $scope['r'+matches[1]];
                    var address = $sysconv.bin2dec(matches[2]);
                    $memory.setWord(address, regValue);
@@ -160,6 +160,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
 
             {"name": "END", "regex": /^0{16}$/, "assemblerFunction": function() {
                 $scope.stop = true;
+                console.log($memory.getDecimal(504));
             }}
         ];
         $scope.get_memory = function(start, end){
@@ -213,6 +214,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
             this.stop = true;
             this.instructionCounter = 100;
             this.executionCounter = 0;
+            this.carryBit = false;
             $memory.wipe();
             this.updateUI();
             $timeout(function(){$scope.stop = false;},1000);
