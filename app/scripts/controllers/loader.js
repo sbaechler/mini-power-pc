@@ -38,33 +38,67 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
             "END"].join("\n")
         },
         {'name': 'Speicher 500 * Speicher 502', 'code': [
-            "LWDD 00, 504",
+           /* "LWDD 00 504",
             "SLA",
-            "SWDD 00, 504",
+            "SWDD 00 504",
 
-
-            "LWDD 00, 506",
-           "SLA",
-            "SWDD 00, 506",
-
-            "LWDD 00, 502",
+            "LWDD 00 506",
             "SLA",
-           "SWDD 00, 502",
+            "SWDD 00 506",
+
+            "LWDD 00 502",
+            "SLA",
+            "SWDD 00 502",
             "BCD 100",
-            "LWDD 00, 504",
+            "LWDD 00 504",
             "ADDD 500",
-            "SWDD 00, 504",
+            "SWDD 00 504",
 
             "BCD 100",
-            "LWDD 00, 506",
+            "LWDD 00 506",
             "INC",
-            "SWDD 00, 506",
+            "SWDD 00 506",
             "BD 100",
 
-            "LWDD 00, 508",
+            "LWDD 00 508",
             "DEC",
 
+            "BNZD 100",*/
+
+
+
+
+
+
+
+            "LWDD 00 504",
+     "SLA",
+      "SWDD 00 504",
+     "LWDD 00 506",
+     "SLA",
+     "SWDD 00 506",
+     "LWDD 00 502",
+     "SLA",
+     "SWDD 00 502",
+     "BCD 132",
+
+
+
+      "LWDD 00 508",
+      "DEC",
+            "SWDD 00 508",
+            "LWDD 00 508",
             "BNZD 100",
+            "END",
+
+
+
+      "LWDD 00 504",
+     "ADDD 500",
+     "SWDD 00 504",
+      "BD 122",
+
+
 
       "END"].join("\n")
         }
