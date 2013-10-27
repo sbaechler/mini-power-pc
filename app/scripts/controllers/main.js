@@ -4,8 +4,8 @@ var miniPowerPCControllers = angular.module('miniPowerPCControllers',
 
 
 
-miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', '$rootScope',
-    function MainCtrl($scope, $memory, $sysconv, $rootScope) {
+miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', '$rootScope', '$timeout',
+    function MainCtrl($scope, $memory, $sysconv, $rootScope, $timeout) {
         // console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
         var WORDLENGTH = 16;
         $rootScope.WORDLENGTH = WORDLENGTH;
@@ -191,18 +191,27 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                 };
         $scope.updateUI();
         $scope.step = function(){
-            if(!$scope.stop) {
-                // Befehl auslesen
-                this._get_instruction();
-                // Ev. Befehlszähler erhöhen. (Wenn kein Sprung)
-                this.instructionCounter += 2;
-                // Befehl interpretieren
-                this._interpret();
-                // Resultat in Speicher schreiben
-                this.executionCounter += 1;
-                this.updateUI();
+            // Befehl auslesen
+            this._get_instruction();
+            // Ev. Befehlszähler erhöhen. (Wenn kein Sprung)
+            this.instructionCounter += 2;
+            // Befehl interpretieren
+            this._interpret();
+            // Resultat in Speicher schreiben
+            this.executionCounter += 1;
+            this.updateUI();
+        };
+        $scope.run = function(){
+            if(!$scope.stop && $scope.instructionCounter < $memory.MEMORY) {
+                $scope.step();
+                $timeout($scope.run, 200);
             }
         };
+        $scope.fastForward = function(){
+            while(!$scope.stop && $scope.instructionCounter < $memory.MEMORY) {
+                $scope.step();
+            }
+        }
         $memory.listen($scope.updateUI);
         $scope.reset = function(){
             this.stop = false;

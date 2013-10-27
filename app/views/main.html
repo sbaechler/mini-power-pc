@@ -54,8 +54,8 @@
   <div class="col-sm-4">
     <div class="btn-group" ng-class="{stop: stop}">
       <button type="button" ng-disabled="stop" ng-click="step()" class="btn btn-default"><span class="glyphicon glyphicon-step-forward"></span> Step</button>
-      <button type="button" ng-disabled="stop" class="btn btn-default"><span class="glyphicon glyphicon-play"></span> Slow</button>
-      <button type="button" ng-disabled="stop" class="btn btn-default"><span class="glyphicon glyphicon-fast-forward"></span> Fast</button>
+      <button type="button" ng-disabled="stop" ng-click="run()" class="btn btn-default"><span class="glyphicon glyphicon-play"></span> Slow</button>
+      <button type="button" ng-disabled="stop" ng-click="fastForward()" class="btn btn-default"><span class="glyphicon glyphicon-fast-forward"></span> Fast</button>
     </div><p></p>
     <h2>Datenspeicher</h2>
     <div class="scrolling-wrapper well">
