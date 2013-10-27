@@ -113,19 +113,19 @@ angular.module('miniPowerPCAssembler', ['sysconvProvider'], function($provide){
                         return op.substring(0,4) + rnr + op.substring(6, op.length);
                     },
             'BZD': function(addr){
-                        var op = [0,0,1,1,0].concat(addrToArray(addr));
+                        var op = [0,0,1,1,0,0].concat(addrToArray(addr));
                         return $sysconv.bintobinoutput(op);
                     },
             'BNZD': function(addr){
-                        var op = [0,0,1,0,1].concat(addrToArray(addr));
+                        var op = [0,0,1,0,1,0].concat(addrToArray(addr));
                         return $sysconv.bintobinoutput(op);
                     },
             'BCD': function(addr){
-                        var op = [0,0,1,1,1].concat(addrToArray(addr));
+                        var op = [0,0,1,1,1,0].concat(addrToArray(addr));
                         return $sysconv.bintobinoutput(op);
                     },
             'BD': function(addr){
-                        var op = [0,0,1,0,0].concat(addrToArray(addr));
+                        var op = [0,0,1,0,0,0].concat(addrToArray(addr));
                         return $sysconv.bintobinoutput(op);
                     },
             'END': function(){

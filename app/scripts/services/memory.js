@@ -21,7 +21,7 @@ angular.module('memoryProvider', ['sysconvProvider'], function($provide){
            setWord : function(addr, value) {
                        var addr = this._validateAddr(addr);
                        if(!value.match(wordmatch)) {
-                           throw("Can only save words (16 bit strings)")
+                           throw("Can only save words (16 bit strings): " + value);
                        }
                        value = value.split(' ');
                        memory[addr] = value[0];

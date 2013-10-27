@@ -92,10 +92,10 @@ describe('Controller: AssemblerCtrl', function () {
   it('should create direct jump commands', function(){
       var a100 = "00 01100100",
          a500 = "01 11110100";
-      expect(assembler.BZD("100")).toBe("00110" + a100);
-      expect(assembler.BNZD("500")).toBe("00101" + a500);
-      expect(assembler.BCD("100")).toBe("00111" + a100);
-      expect(assembler.BD("500")).toBe("00100" + a500);
+      expect(assembler.BZD("100")).toBe("001100" + a100);
+      expect(assembler.BNZD("500")).toBe("001010" + a500);
+      expect(assembler.BCD("100")).toBe("001110" + a100);
+      expect(assembler.BD("500")).toBe("001000" + a500);
   });
 
   it('should create END command', function(){
