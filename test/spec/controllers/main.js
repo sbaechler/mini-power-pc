@@ -168,6 +168,20 @@ describe('Controller: MainCtrl', function () {
         expect(scope.carryBit).toBe(false);
         expect(scope.r00).toEqual("11111111 11111111");
     });
+    it('can load from memory', function(){
+        scope.speicherWert = "20";
+        scope.storeValue(500);
+        scope.r00 = "00000000 00000000";
+        scope.instructionRegister = "01000001 11110100";
+        scope._interpret();
+        expect(scope.r00).toEqual("00000000 00010100")
+    });
+    it('can write to memory', function(){
+        scope.r00 = "00000000 00010100";
+        scope.instructionRegister = "01100001 11110110";
+        scope._interpret();
+        expect(scope.get_decimal(502)).toBe(20);
+    });
 
     //test SLA
     it('Mnemonic SLA test', function(){
