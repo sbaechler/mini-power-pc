@@ -14,7 +14,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         $scope.r01 = null;  // R01
         $scope.r10 = null;  // R02
         $scope.r11 = null;  // R03
-        $scope.speicherWert = null; // Temp. Variable bei Direkteingabe von Werten.
+        $scope.speicherWert = []; // Temp. Variable bei Direkteingabe von Werten.
         $scope.instructionCounter = 100;
         $scope.instructionRegister = null;
         $scope.carryBit = false;
@@ -160,7 +160,6 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
 
             {"name": "END", "regex": /^0{16}$/, "assemblerFunction": function() {
                 $scope.stop = true;
-                console.log($memory.getDecimal(504));
             }}
         ];
         $scope.get_memory = function(start, end){
@@ -184,6 +183,9 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                                   'class': i==$scope.instructionCounter ? 'success': ''});
                     }
                     $scope.currentSteps = mem;
+                    for(var i=500; i<=510; i++) {
+                        $scope.speicherWert[i] = $memory.getDecimal(i);
+                    }
                     $scope._get_instruction();
                 };
         $scope.updateUI();
@@ -221,7 +223,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         }
         $scope.storeValue = function(addr){
             try {
-                $memory.setDecimal(addr, this.speicherWert.toString());
+                $memory.setDecimal(addr, this.speicherWert[addr].toString());
             } catch(ValueError) {}  // Kommt bei der Eingabe des Minus
         }
         $scope._interpret = function(){
