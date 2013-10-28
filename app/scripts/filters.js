@@ -18,4 +18,9 @@ miniPowerPCFilters
                 return "";
             }
         }
-    }]);
+ }]).filter('times5', function(){
+    return function(value){
+        var val = parseInt(value) * 5;
+        return val.toString();
+    }
+});

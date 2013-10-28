@@ -7,7 +7,8 @@ var miniPowerpcApp = angular.module('miniPowerpcApp', [
     'miniPowerPCFilters',
     'memoryProvider',
     'miniPowerPCLoader',
-    'sysconvProvider'
+    'sysconvProvider',
+    'uiSlider'
 ]);
 
 miniPowerpcApp.config(['$routeProvider',

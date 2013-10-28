@@ -4,7 +4,8 @@ var miniPowerPCControllers = angular.module('miniPowerPCControllers',
 
 
 
-miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', '$rootScope', '$timeout',
+miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', '$rootScope',
+                                               '$timeout',
     function MainCtrl($scope, $memory, $sysconv, $rootScope, $timeout) {
         // console.log("Power PC ready. Memory: " + $memory.memory().length + " Bytes.");
         var WORDLENGTH = 16;
@@ -18,6 +19,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         $scope.instructionCounter = 100;
         $scope.instructionRegister = null;
         $scope.carryBit = false;
+        $scope.speed = 10;
         $scope.assemblerCommands =  [
             {"name": "CLR Rnr", "regex": /^0000([01]{2})101[01]{7}$/, "assemblerFunction": function(matches) {
                     $scope['r'+matches[1]] = "00000000 00000000";
@@ -200,7 +202,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         $scope.run = function(){
             if(!$scope.stop && $scope.instructionCounter < $memory.MEMORY) {
                 $scope.step();
-                $timeout($scope.run, 200);
+                $timeout($scope.run, 1000-(($scope.speed-1)*50));
             }
         };
         $scope.fastForward = function(){
