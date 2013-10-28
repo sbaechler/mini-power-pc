@@ -2,8 +2,39 @@
 // Faktor a befindet sich in #500, Faktor b in #502.
 // Lösung muss in Speicher #504 (lower) und #506 (higher) stehen.
 
-// Zwischenspeicher: 510: Zähler
+// Zwischenspeicher: 510: Zähler, 512: Vorzeichen.
 
+CLR 00
+SWDD 00 512     // Speicher 512 auf 0 setzen.
+
+check a:
+LWDD 00 500     // Lade Faktor a in den Akku
+SLL             // Shift nach links
+BCD + 2         // 1. Bit ist 1 -> negative Zahl, muss invertiert werden.
+BD check b
+LWDD 00 500     // Faktor a neu laden
+NOT             // Invertieren
+INC             // 1 hinzufügen
+SWDD 00 500     // Positive Zahl in Speicher 500 schreiben.
+CLR 00
+INC
+SWDD 00 512     // 1 in Speicher 512 schreiben.
+
+check b:
+LWDD 00 502     // Lade Faktor b in den Akku
+SLL             // Shift nach links
+BCD + 2         // 1. Bit ist 1 -> negative Zahl, muss invertiert werden.
+BD load
+LWDD 00 502     // Faktor a neu laden
+NOT             // Invertieren
+INC             // 1 hinzufügen
+SWDD 00 502     // Positive Zahl in Speicher 500 schreiben.
+LWDD 00 512     // Wert aus Speicher 512 laden
+INC
+SWDD 00 512     // 1 in Speicher 512 schreiben.
+
+
+load:
 LWDD 10 500     // Lade Faktor a in Register 10
 CLR 01          // Register 01 löschen
 CLR 00          // Akku löschen
@@ -43,5 +74,19 @@ LWDD 00 510
 DEC
 SWDD 00 510
 BNZD mult
+
+vorzeichen:
+LWDD 00 512     // Zahl aus Speicher 512 laden. Wenn 1, muss Resultat negiert werden.
+SRL             // LSB checken
+BCD + 2
+END
+LWDD 00 504     // Lower Zahl laden
+NOT
+INC
+SWDD 00 504
+LWDD 00 506
+NOT
+INC
+SWDD 00 506
 END
 
