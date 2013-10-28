@@ -26,10 +26,12 @@ SWDD 00 506     // Abspeichern
 
 LWDD 00 502
 SLL             // Das MSB von Faktor b ins Carry schreiben.
+SWDD 00 502     // Wider speichern
 BCD +2          // Ist das Flag gesetzt: Faktor a Addieren.
 BD +8            // If Teil überspringen
 LWDD 00 504     // Faktor A zum Ergebnis addieren.
 ADD 10          //
+SWDD 00 504
 BCD + 2         // Überlauf bei Lower: 1 zu upper addieren.
 BD + 4          // If Teil überspringen
 LWDD 00 506
