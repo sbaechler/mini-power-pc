@@ -15,7 +15,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         $scope.r01 = null;  // R01
         $scope.r10 = null;  // R02
         $scope.r11 = null;  // R03
-        $scope.speicherWert = null; // Temp. Variable bei Direkteingabe von Werten.
+        $scope.speicherWert = []; // Temp. Variable bei Direkteingabe von Werten.
         $scope.instructionCounter = 100;
         $scope.instructionRegister = null;
         $scope.carryBit = false;
@@ -61,13 +61,13 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                 $scope.carryBit = msb==='1' && $scope.r00[0] === '0';
                 }},
 
-            {"name": "LWDD Rnr, #Adr", "regex": /^010[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
+            {"name": "LWDD Rnr, #Adr", "regex": /^010[01]([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
                 var addrInDec = $sysconv.bin2dec(matches[2]);
                 $scope['r'+matches[1]] = $memory.getWord(addrInDec);
             }},
 
 
-            {"name": "SWDD Rnr, #Adr", "regex": /^011[01]{1}([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
+            {"name": "SWDD Rnr, #Adr", "regex": /^011[01]([01]{2})([01]{10})$/, "assemblerFunction": function(matches) {
                    var regValue = $scope['r'+matches[1]];
                    var address = $sysconv.bin2dec(matches[2]);
                    $memory.setWord(address, regValue);
@@ -185,6 +185,9 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                                   'class': i==$scope.instructionCounter ? 'success': ''});
                     }
                     $scope.currentSteps = mem;
+                    for(var i=500; i<=510; i++) {
+                        $scope.speicherWert[i] = $memory.getDecimal(i);
+                    }
                     $scope._get_instruction();
                 };
         $scope.updateUI();
@@ -212,15 +215,17 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         }
         $memory.listen($scope.updateUI);
         $scope.reset = function(){
-            this.stop = false;
+            this.stop = true;
             this.instructionCounter = 100;
             this.executionCounter = 0;
+            this.carryBit = false;
             $memory.wipe();
             this.updateUI();
+            $timeout(function(){$scope.stop = false;},1000);
         }
         $scope.storeValue = function(addr){
             try {
-                $memory.setDecimal(addr, this.speicherWert.toString());
+                $memory.setDecimal(addr, this.speicherWert[addr].toString());
             } catch(ValueError) {}  // Kommt bei der Eingabe des Minus
         }
         $scope._interpret = function(){

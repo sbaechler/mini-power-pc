@@ -1,1 +1,45 @@
-LADE
+// Multiplikation zweier positiver 16-Bit Zahlen
+// Faktor a befindet sich in #500, Faktor b in #502.
+// Lösung muss in Speicher #504 (lower) und #506 (higher) stehen.
+
+// Zwischenspeicher: 510: Zähler
+
+LWDD 10 500     // Lade Faktor a in Register 10
+CLR 01          // Register 01 löschen
+CLR 00          // Akku löschen
+ADDD 16         // 16 in den Akku schreiben.
+SWDD 00 510     // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
+SWDD 10 504     // Faktor a in Speicher #504 zwischenspeichern.
+SWDD 01 506     // Speicher #506 löschen.
+
+mult:
+LWDD 00 504
+SLL             // Low Byte nach links
+SWDD 00 504
+LWDD 00 506     // High Byte laden
+BCD +3          // Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
+SLL             // Shift nach links
+BD +3           // Else überspringen
+SLL             // Else: Shift nach links
+INC             // Plus 1
+SWDD 00 506     // Abspeichern
+
+LWDD 00 502
+SLL             // Das MSB von Faktor b ins Carry schreiben.
+BCD +2          // Ist das Flag gesetzt: Faktor a Addieren.
+BD +8            // If Teil überspringen
+LWDD 00 504     // Faktor A zum Ergebnis addieren.
+ADD 10          //
+BCD + 2         // Überlauf bei Lower: 1 zu upper addieren.
+BD + 4          // If Teil überspringen
+LWDD 00 506
+INC             // 1 zu upper hinzufügen.
+SWDD 00 506
+
+noadd:
+LWDD 00 510
+DEC
+SWDD 00 510
+BNZD mult
+END
+

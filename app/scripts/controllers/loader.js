@@ -13,7 +13,7 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
            // console.log(cmd);
            if(cmd != ""){
                word = $assembler[cmd[0]](cmd[1], cmd[2], cmd[3]);
-               console.log(word);
+               console.log(cmd + ": " + word);
                $memory.setWord(addr, word);
                addr += 2;
            }
@@ -38,33 +38,47 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
             "END"].join("\n")
         },
         {'name': 'Speicher 500 * Speicher 502', 'code': [
-            /*init*/
-            "LWDD 02, #502", /*Hier steht das zwischenergebnis. am anfang ist der wert = 2.zah*/
+            'LWDD 10 500',   // Lade Faktor a in Register 2
+            'CLR 01',        // Register 01 löschen
+            'CLR 00',        // Akku löschen
+            'ADDD 16',       // 16 in den Akku schreiben.
+            'SWDD 00 510',   // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
+            'SWDD 01 504',   // Speicher #504 löschen.
+            'SWDD 01 506',  // Speicher #506 löschen.
 
-            /*Schleifenstart.der wert des zähler ist am anfang 0*/
-            "LWDD 00, #504", /*Zähler aus der adresse in akku speichern*/
-            "SLA", /*zähler um eins nach links verschieben*/
-            "SWDD 00, #504", /*zähler zurück in die adresse laden*/
-            "BZD #", /*wenn der akku ==0 ist, sollte abgebrochen werden*/
+            //mult:
+            'LWDD 00 504',      // #114
+            'SLL',             // Low Byte nach links
+            'SWDD 00 504',
+            'LWDD 00 506',     // High Byte laden
+            'BCD 128',          // Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
+            'SLL',             // Shift nach links
+            'BD 132',           // Else überspringen
+            'SLL',             // Else: Shift nach links
+            'INC',             // Plus 1
+            'SWDD 00 506',     // Abspeichern  #132
 
-            "LWDD 01, #504", /*Zähler aus der adresse nach register 1 speichern*/
-            "LWDD 00, #504",/*1. zahl der mult. aus der adresse ins akku speichern*/
-            "AND 01", /*Logisches & mit akku (1 Zahl) und R1 (zähler). schauen ob an der stelle eine 1 oder 0 steht.*/
+            'LWDD 00 502',      // Faktor b laden.
+            'SLL',             // Das MSB von Faktor b ins Carry schreiben.
+            'SWDD 00 502',
+            'BCD 144',          // Ist das Flag gesetzt: Faktor a Addieren.
+            'BD 158',            // If Teil überspringen
+            'LWDD 00 504',     // Faktor A zum Ergebnis addieren. //144
+            'ADD 10',          //
+            'SWDD 00 504',      // Speichern
+            'BCD 154',         // Überlauf bei Lower: 1 zu upper addieren.
+            'BD 160',          // If Teil überspringen
+            'LWDD 00 506',
+            'INC',             // 1 zu upper hinzufügen. #156
+            'SWDD 00 506',
 
-            /*wenn der akku ==0 ist*/
-            "BZD #", /*wenn der akku 0 ist, wiederhole die schleife*/
-
-            /*wenn der akku !=0 ist*/
-            "LWDD 00, #502", /* zweite zahl der multiplikation ins akku laden*/
-            "INC", /*Akkuinhalt um eins erhöhen bzw um ein verschieben*/
-            "SWDD 00, #502", /*die verschobene 2. zahl zurück in die adresse speichern*/
-            "ADD 02", /*zwischenergebnis + verschobene 2. zahl, ergebnis steht in der akku*/
-            "LWDD 03, #502", /*die verschobene 2. zahl ins register 3 verschieben*/
-            "SWDD 00, #502", /*das neue ergebnis in die adresse speichern*/
-            "LWDD 02, #502", /*das neue ergebnis ins register 2 verschieben*/
-            "SWDD 03, #502", /*die 2. zahl wieder zurück in die adresse speichern*/
-            "BD #", /*unbedingter sprung, wiederhole die schleife*/
-            "END"].join("\n")
+            //noadd:
+            'LWDD 00 510',
+            'DEC',
+            'SWDD 00 510',
+            'BNZD 114',    // #164
+            'END'
+        ].join("\n")
         }
     ];
     $scope.fillProgram = function(value){
