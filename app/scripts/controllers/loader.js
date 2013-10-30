@@ -38,47 +38,102 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
             "END"].join("\n")
         },
         {'name': 'Speicher 500 * Speicher 502', 'code': [
-            'LWDD 10 500',   // Lade Faktor a in Register 2
-            'CLR 01',        // Register 01 löschen
-            'CLR 00',        // Akku löschen
-            'ADDD 16',       // 16 in den Akku schreiben.
-            'SWDD 00 510',   // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
-            'SWDD 01 504',   // Speicher #504 löschen.
-            'SWDD 01 506',  // Speicher #506 löschen.
+            // Multiplikation zweier positiver 16-Bit Zahlen
+// Faktor a befindet sich in #500, Faktor b in #502.
+// Lösung muss in Speicher #504 (lower) und #506 (higher) stehen.
 
-            //mult:
-            'LWDD 00 504',      // #114
-            'SLL',             // Low Byte nach links
-            'SWDD 00 504',
-            'LWDD 00 506',     // High Byte laden
-            'BCD 128',          // Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
-            'SLL',             // Shift nach links
-            'BD 132',           // Else überspringen
-            'SLL',             // Else: Shift nach links
-            'INC',             // Plus 1
-            'SWDD 00 506',     // Abspeichern  #132
+// Zwischenspeicher: 510: Zähler, 512: Vorzeichen.
 
-            'LWDD 00 502',      // Faktor b laden.
-            'SLL',             // Das MSB von Faktor b ins Carry schreiben.
-            'SWDD 00 502',
-            'BCD 144',          // Ist das Flag gesetzt: Faktor a Addieren.
-            'BD 158',            // If Teil überspringen
-            'LWDD 00 504',     // Faktor A zum Ergebnis addieren. //144
-            'ADD 10',          //
-            'SWDD 00 504',      // Speichern
-            'BCD 154',         // Überlauf bei Lower: 1 zu upper addieren.
-            'BD 160',          // If Teil überspringen
-            'LWDD 00 506',
-            'INC',             // 1 zu upper hinzufügen. #156
-            'SWDD 00 506',
+      "CLR 00",
+      "SWDD 00 512",     // Speicher 512 auf 0 setzen.
 
-            //noadd:
-            'LWDD 00 510',
-            'DEC',
-            'SWDD 00 510',
-            'BNZD 114',    // #164
-            'END'
-        ].join("\n")
+      //check a
+      "LWDD 00 500",     // Lade Faktor a in den Akku
+      "SLL",             // Shift nach links
+      "BCD 112",         // 1. Bit ist 1 -> negative Zahl, muss invertiert werden.
+      "BD 126",
+      "LWDD 00 500",     // Faktor a neu laden
+      "NOT",             // Invertieren
+      "INC",             // 1 hinzufügen
+      "SWDD 00 500",     // Positive Zahl in Speicher 500 schreiben.
+      "CLR 00",
+      "INC",
+      "SWDD 00 512",     // 1 in Speicher 512 schreiben.
+
+      //check b Adresse 126
+      "LWDD 00 502",     // Lade Faktor b in den Akku
+      "SLL",             // Shift nach links
+      "BCD 134",         // 1. Bit ist 1 -> negative Zahl, muss invertiert werden.
+      "BD 152",
+      "LWDD 00 502",     // Faktor a neu laden
+      "NOT",             // Invertieren
+      "INC",             // 1 hinzufügen
+      "SWDD 00 502",     // Positive Zahl in Speicher 500 schreiben.
+      "LWDD 00 512",     // Wert aus Speicher 512 laden
+      "INC",
+      "SWDD 00 512",     // 1 in Speicher 512 schreiben.
+
+
+      //load Adresse 152
+      "LWDD 10 500",     // Lade Faktor a in Register 10
+      "CLR 01",          // Register 01 löschen
+      "CLR 00",          // Akku löschen
+      "ADDD 16",         // 16 in den Akku schreiben.
+      "SWDD 00 510",     // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
+      "SWDD 10 504",     // Faktor a in Speicher #504 zwischenspeichern.
+      "SWDD 01 506",     // Speicher #506 löschen.
+
+      //mult: Adresse 168
+      "LWDD 00 504",
+      "SLL",             // Low Byte nach links
+      "SWDD 00 504",
+      "LWDD 00 506",     // High Byte laden
+      "BCD 182",          // Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
+      "SLL",             // Shift nach links
+      "BD 188",           // Else überspringen
+      "SLL",             // Else: Shift nach links
+      "INC",             // Plus 1
+      "SWDD 00 506",     // Abspeichern
+
+      //Adresse 188
+      "LWDD 00 502",
+      "SLL",             // Das MSB von Faktor b ins Carry schreiben.
+      "SWDD 00 502",     // Wider speichern
+      "BCD 198",          // Ist das Flag gesetzt: Faktor a Addieren.
+      "BD 204",            // If Teil überspringen
+      "LWDD 00 504",     // Faktor A zum Ergebnis addieren.
+      "ADD 10",          //
+      "SWDD 00 504",
+      "BCD 208",         // Überlauf bei Lower: 1 zu upper addieren.
+      "BD 212",          // If Teil überspringen
+      "LWDD 00 506",
+      "INC",             // 1 zu upper hinzufügen.
+      "SWDD 00 506",
+
+      //noadd:
+      "LWDD 00 510",
+      "DEC",
+      "SWDD 00 510",
+      "BNZD 168",
+
+      //vorzeichen
+      "LWDD 00 512",     // Zahl aus Speicher 512 laden. Wenn 1, muss Resultat negiert werden.
+      "SRL",             // LSB checken
+      "BCD 230",
+      "END",
+      "LWDD 00 504",     // Lower Zahl laden
+      "NOT",
+      "INC",
+      "SWDD 00 504",
+      "LWDD 00 506",
+      "NOT",
+      "INC",
+      "SWDD 00 506",
+      "END"
+
+
+
+      ].join("\n")
         }
     ];
     $scope.fillProgram = function(value){
