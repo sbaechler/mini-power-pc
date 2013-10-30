@@ -169,7 +169,7 @@ describe('Controller: MainCtrl', function () {
         expect(scope.r00).toEqual("11111111 11111111");
     });
     it('can load from memory', function(){
-        scope.speicherWert = "20";
+        scope.speicherWert[500] = "20";
         scope.storeValue(500);
         scope.r00 = "00000000 00000000";
         scope.instructionRegister = "01000001 11110100";
@@ -219,12 +219,12 @@ describe('Controller: MainCtrl', function () {
     });
 
     it("should store numbers as string in memory", function(){
-        scope.speicherWert = "10";
+        scope.speicherWert[500] = "10";
         scope.storeValue(500);
         expect(scope.get_memory(500, 502)).toEqual(["00000000", "00001010"]);
     });
     it("should store numbers as number in memory", function(){
-        scope.speicherWert = 10;
+        scope.speicherWert[500] = 10;
         scope.storeValue(500);
         expect(scope.get_memory(500, 502)).toEqual(["00000000", "00001010"]);
     });
