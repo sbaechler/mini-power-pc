@@ -282,8 +282,15 @@ angular.module('sysconvProvider', [], function($provide){
     },
     // convert a binary String to decimal
     bin2dec: function(bininput){
-        return parseInt(this.bintodecoutput(this.bininputtobin(bininput))
+        var bin = this.bintruncate(this.bininputtobin(bininput), 16);
+        if (bin[0]) {  // negative Zahl
+            var reversed = this.twoscomplement(this.onescomplement(bin));
+            return parseInt(this.bintodecoutput(reversed).replace(/\s/g, '')) * (-1);
+        } else {
+            return parseInt(this.bintodecoutput(this.bininputtobin(bininput))
                                                 .replace(/\s/g, ''));
+        }
+
     },
     // converts a binary array to 16 bit
     binarray2word: function(bin){

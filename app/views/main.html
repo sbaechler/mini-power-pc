@@ -4,7 +4,8 @@
   </div>
 
   <div class="col-sm-4">
-    <button type="button" ng-click="reset()" class="btn btn-danger">Reset</button><p></p>
+    <button type="button" ng-click="reset()" class="btn btn-danger">Reset</button>
+    <button type="button" ng-click="restart()" class="btn btn-warning">Restart</button><p></p>
     <div>
       <label for="speed-slider">Speed: {{speed|times5}}%</label>
       <slider id="speed-slider" floor="1" ceiling="20" step="1" precision="2" ng-model="speed">{{speed}}</slider>

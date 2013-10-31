@@ -214,14 +214,18 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
             }
         }
         $memory.listen($scope.updateUI);
-        $scope.reset = function(){
+        $scope.restart = function(){
             this.stop = true;
             this.instructionCounter = 100;
             this.executionCounter = 0;
             this.carryBit = false;
+            $timeout(function(){$scope.stop = false;},1000);
+            this.updateUI();
+        }
+        $scope.reset = function(){
+            this.restart();
             $memory.wipe();
             this.updateUI();
-            $timeout(function(){$scope.stop = false;},1000);
         }
         $scope.storeValue = function(addr){
             try {
