@@ -205,7 +205,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         $scope.run = function(){
             if(!$scope.stop && $scope.instructionCounter < $memory.MEMORY) {
                 $scope.step();
-                $timeout($scope.run, 1000-(($scope.speed-1)*50));
+                $timeout($scope.run, 200-(($scope.speed-1)*10));
             }
         };
         $scope.fastForward = function(){
