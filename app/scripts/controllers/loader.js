@@ -57,80 +57,80 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
       "INC",             // 1 hinzufügen
       "SWDD 00 500",     // Positive Zahl in Speicher 500 schreiben.
       "CLR 00",          // Adresse 120:
-      "LWDD 00 512",     //  Wert aus Speicher 512 laden
+      //"LWDD 00 512",     //  Wert aus Speicher 512 laden
       "INC",
       "SWDD 00 512",     // 1 in Speicher 512 schreiben.
 
-      //check b Adresse 128
+      //check b Adresse 126
       "LWDD 00 502",     // Lade Faktor b in den Akku
-      "SLL",             // Adresse 130: Shift nach links
-      "BCD 136",         // +2: 1. Bit ist 1 -> negative Zahl, muss invertiert werden.
-      "BD 150",          // load
+      "SLL",             // Shift nach links
+      "BCD 134",         // Adresse 130: +2: 1. Bit ist 1 -> negative Zahl, muss invertiert werden.
+      "BD 148",          // load
       "LWDD 00 502",     // Faktor a neu laden
       "NOT",             // Invertieren
-      "INC",             // Adresse 140: 1 hinzufügen
-      "SWDD 00 502",     // Positive Zahl in Speicher 502 schreiben.
+      "INC",             // 1 hinzufügen
+      "SWDD 00 502",     // Adresse 140: Positive Zahl in Speicher 502 schreiben.
       "LWDD 00 512",     // Wert aus Speicher 512 laden
       "INC",
       "SWDD 00 512",     // 1 in Speicher 512 schreiben.
 
 
-      //load Adresse 150
-      "LWDD 10 500",     // Adresse 150: Lade Faktor a in Register 10
-      "CLR 01",          // Register 01 löschen
+      //load Adresse 148
+      "LWDD 10 500",     // Lade Faktor a in Register 10
+      "CLR 01",          // Adresse 150: Register 01 löschen
       "CLR 00",          // Akku löschen
       "ADDD 16",         // 16 in den Akku schreiben.
       "SWDD 00 510",     // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
-      "SWDD 10 504",     // Adresse 160: Faktor a in Speicher #504 zwischenspeichern.
-      "SWDD 01 506",     // Speicher #506 löschen.
+      "SWDD 10 504",     // Faktor a in Speicher #504 zwischenspeichern.
+      "SWDD 01 506",     // Adresse 160: Speicher #506 löschen.
 
-      //mult: Adresse 164
+      //mult: Adresse 162
       "LWDD 00 504",
       "SLL",             // Low Byte nach links
       "SWDD 00 504",
-      "LWDD 00 506",     // Adresse 170: High Byte laden
-      "BCD 178",         // +3: Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
+      "LWDD 00 506",     // High Byte laden
+      "BCD 176",         // Adresse 170: +3: Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
       "SLL",             // Shift nach links
-      "BD 182",          // +3: Else überspringen
+      "BD 180",          // +3: Else überspringen
       "SLL",             // Else: Shift nach links
-      "INC",             // Adresse 180: Plus 1
-      "SWDD 00 506",     // Abspeichern
+      "INC",             // Plus 1
+      "SWDD 00 506",     // Adresse 180: Abspeichern
 
-      //Adresse 184
+      //Adresse 182
       "LWDD 00 502",
       "SLL",             // Das MSB von Faktor b ins Carry schreiben.
       "SWDD 00 502",     // Wider speichern
-      "BCD 194",         // Adresse 190: +2: Ist das Flag gesetzt: Faktor a Addieren.
-      "BD 208",          // +8: If Teil überspringen
+      "BCD 192",         // +2: Ist das Flag gesetzt: Faktor a Addieren.
+      "BD 206",          // Adresse 190: +8: If Teil überspringen
       "LWDD 00 504",     // Faktor A zum Ergebnis addieren.
       "ADD 10",          //
       "SWDD 00 504",
-      "BCD 204",         // Adresse 200: +2:Überlauf bei Lower: 1 zu upper addieren.
-      "BD 210",          // +4: If Teil überspringen
+      "BCD 202",         // +2:Überlauf bei Lower: 1 zu upper addieren.
+      "BD 208",          // Adresse 200: +4: If Teil überspringen
       "LWDD 00 506",
       "INC",             // 1 zu upper hinzufügen.
       "SWDD 00 506",
 
-      //noadd: Adresse 210
-      "LWDD 00 510",     //Adresse 210
-      "DEC",
+      //noadd: Adresse 218
+      "LWDD 00 510",
+      "DEC",             //Adresse 210
       "SWDD 00 510",
-      "BNZD 164",        //mult
+      "BNZD 162",        //mult
 
       //vorzeichen: Adresse 216
       "LWDD 00 512",     // Zahl aus Speicher 512 laden. Wenn 1, muss Resultat negiert werden.
-      "SRL",             //Adresse 220: LSB checken
-      "BCD 226",         // +2
+      "SRL",             //LSB checken
+      "BCD 224",         //Adresse 220:  +2
       "END",
       "LWDD 00 504",     // Lower Zahl laden
       "NOT",
-      "INC",             //Adresse 230
-      "SWDD 00 504",
+      "INC",
+      "SWDD 00 504",     //Adresse 230
       "LWDD 00 506",
       "NOT",
       "INC",
-      "SWDD 00 506",    //240
-      "END"
+      "SWDD 00 506",
+      "END"               //240
 
       ].join("\n")
         }
