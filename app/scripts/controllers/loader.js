@@ -92,16 +92,16 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
       "BCD 176",         // Adresse 170: +3: Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
       "SLL",             // Shift nach links
       "BD 180",          // +3: Else überspringen
-      "SLL",             // Else: Shift nach links
-      "INC",             // Plus 1
-      "SWDD 00 506",     // Adresse 180: Abspeichern
+      "SLL",             // Else: Shift nach links: evt unnötig
+      "CLR 00",             // Plus 1: evt unnötig 
+      "SWDD 00 506",     // Adresse 180: Abspeichern: evt unnötig
 
       //Adresse 182
       "LWDD 00 502",
       "SLL",             // Das MSB von Faktor b ins Carry schreiben.
       "SWDD 00 502",     // Wider speichern
       "BCD 192",         // +2: Ist das Flag gesetzt: Faktor a Addieren.
-      "BD 206",          // Adresse 190: +8: If Teil überspringen
+         "BD 206",          // Adresse 190: +8: If Teil überspringen
       "LWDD 00 504",     // Faktor A zum Ergebnis addieren.
       "ADD 10",          //
       "SWDD 00 504",
@@ -111,7 +111,7 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
       "INC",             // 1 zu upper hinzufügen.
       "SWDD 00 506",
 
-      //noadd: Adresse 218
+      //noadd: Adresse 208
       "LWDD 00 510",
       "DEC",             //Adresse 210
       "SWDD 00 510",
