@@ -29,9 +29,11 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
             {"name": "ADD Rnr", "regex": /^0000([01]{2})111[01]{7}$/, "assemblerFunction": function(matches) {
                 var bin1 = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 var bin2 = $sysconv.bintruncate($sysconv.bininputtobin($scope['r'+matches[1]]), WORDLENGTH);
-                var result = $sysconv.bintruncate($sysconv.binadd(bin1, bin2), WORDLENGTH);
-                $scope.carryBit = bin1[0]==bin2[0] && bin1[0]!=result[0];
-                $scope.r00 = $sysconv.binarray2word(result);
+                // var result = $sysconv.bintruncate($sysconv.binadd(bin1, bin2), WORDLENGTH);
+                // $scope.carryBit = bin1[0]==bin2[0] && bin1[0]!=result[0];
+                var result = $sysconv.binadd(bin1, bin2);
+                $scope.carryBit = result.length > WORDLENGTH && !(bin1[0]&&bin2[0]);
+                $scope.r00 = $sysconv.binarray2word($sysconv.bintruncate(result, WORDLENGTH));
                 }
             },
 
