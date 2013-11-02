@@ -190,12 +190,11 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                     for(var i=500; i<=510; i=i+2) {
                         $scope.speicherWert[i] = $memory.getDecimal(i);
                     }
-                    for(var i = 507; i<516; i=i+4) {
-                        var lower = $memory.getWord(i-3);
-                        var higher = $memory.getWord(i-1);
-                        var longStr = higher + lower;
-                        $scope.speicherWert[i] = $sysconv.bin2dec(longStr, 32);
-                    }
+                    var i = 507;
+                    var lower = $memory.getWord(i-3);
+                    var higher = $memory.getWord(i-1);
+                    var longStr = higher + lower;
+                    $scope.speicherWert[i] = $sysconv.bin2dec(longStr, 32);
                     $scope._get_instruction();
                 };
         $scope.updateUI();

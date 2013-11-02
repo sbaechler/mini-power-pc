@@ -41,6 +41,7 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
             // Multiplikation zweier positiver 16-Bit Zahlen
 // Faktor a befindet sich in #500, Faktor b in #502.
 // Lösung muss in Speicher #504 (lower) und #506 (higher) stehen.
+// http://www.avr-asm-tutorial.net/avr_de/quellen/mult8.asm
 
 // Zwischenspeicher: 510: Zähler, 512: Vorzeichen.
 
@@ -135,7 +136,6 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
       "SWDD 00 504",      //
       "LWDD 00 506",
       "NOT",
-      "INC",
       "SWDD 00 506",
       "END"             //
 
