@@ -89,11 +89,11 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
       "SLL",             // Low Byte nach links
       "SWDD 00 504",
       "LWDD 00 506",     // Adresse 170: High Byte laden
-      "BCD 178",         // +3: Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
+      "BD 178",         // +3: Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
       "SLL",             // Shift nach links
       "BD 182",          // +3: Else überspringen
       "SLL",             // Else: Shift nach links
-      "INC",             // Adresse 180: Plus 1
+      "SWDD 00 506",    // Adresse 180: Plus 1
       "SWDD 00 506",     // Abspeichern
 
       //Adresse 184
