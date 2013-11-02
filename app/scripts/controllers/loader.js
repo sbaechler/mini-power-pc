@@ -76,10 +76,10 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
 
 
         // load:
-        "LWDD 10 500",     // Lade Faktor a in Register 10  150
-        "CLR 00",          // Akku löschen
+        "CLR 00",          // Akku löschen  150
         "CLR 01",          //
-        "CLR 10",          //
+        "CLR 11",          //
+        "LWDD 10 500",     // Lade Faktor a in Register 10
         "SWDD 00 510",     // Hilfsregister löschen.
         "SWDD 00 506",     // Speicher #506 löschen.   160
         "SWDD 00 504",     // Speicher 504 (lower) löschen.
@@ -91,49 +91,53 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
         "SRL",
         "SWDD 00 502",
         // #step2: Verzweigen je nachdem ob eine Null oder eine Eins im Carry steht
-        "BCD 174",  // springe, wenn niedrigstes Bit eine Null ist, ueber das Addieren hinweg.  170
-        "BD 192",  // -> # step4
+        "BCD 174",  //  170 springe, wenn niedrigstes Bit eine Null ist, ueber das Addieren hinweg.
+        "BD 196",  // -> # step4
         // #add Addiere 16 Bits in rmh:rm1 zum Ergebnis in reh:rel (mit Ueberlauf der unteren 8 Bits!
         "LWDD 00 504",   // #add: Lade lower in Akku
+        "LWDD 10 500",
         "ADD 10",        // Faktor a addieren
-        "SWDD 00 504",
-        "BCD 184",  // 180  ->#addBCarry
-        "BD 188",  // -> #loadRmh
-        "LWDD 00 510",   // #addBCarry
-        "ADDD 1",
-        "ADD 01",    // #loadRmh
-        "SWDD 00 510",      // 190
+        "SWDD 00 504",                          // 180
+        "LWDD 00 506",
+        "BCD 188",  //   ->#addBCarry
+        "BD 190",  // -> #loadRmh
+        "ADDD 1",       // #addBCarry
+        "LWDD 11 510",   // #loadRmh  190
+        "ADD 11",    //
+        "SWDD 00 506",      //
 
         // #step4
         "LWDD 00 500",
-        "SLL",
-        "SWDD 00 500",
+        "SLL",              //
+        "SWDD 00 500",          // 200
         "LWDD 00 510",
-        "BCD 204",       // 200  -> #addACarry
-        "BD 210",   //-> #shiftMSB
+        "BCD 208",       //   -> #addACarry
+        "BD 214",   //-> #shiftMSB
         "SLL",  // #addACarry
-        "INC",
-        "BD 212",   // -> #step5
-        "SLL", // #shiftMSB     210
+        "INC",      // 210
+        "BD 216",   // -> #step5
+        "SLL", // #shiftMSB
+        "SWDD 00 510",
 
         //  #step5
         "LWDD 00 502",
-        "BZD 192",  // -> #step4
+        "BZD 224",  //   220
+        "BD 164",  // -> #step1
 
-      //vorzeichen: Adresse 216
-      "LWDD 00 512",     // Zahl aus Speicher 512 laden. Wenn 1, muss Resultat negiert werden.
+      //vorzeichen:
+      "LWDD 00 512",     //  Zahl aus Speicher 512 laden. Wenn 1, muss Resultat negiert werden.
       "SRL",             // LSB checken
-      "BCD 224",         // +2      220
+      "BCD 232",         // +2
       "END",
       "LWDD 00 504",     // Lower Zahl laden
       "NOT",
       "INC",             //Adresse
-      "SWDD 00 504",      //  230
+      "SWDD 00 504",      //
       "LWDD 00 506",
       "NOT",
       "INC",
       "SWDD 00 506",
-      "END"             //240
+      "END"             //
 
       ].join("\n")
         }

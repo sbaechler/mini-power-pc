@@ -17,6 +17,7 @@ NOT             // Invertieren
 INC             // 1 hinzufügen
 SWDD 00 500     // Positive Zahl in Speicher 500 schreiben.
 CLR 00
+LWDD 00 512
 INC
 SWDD 00 512     // 1 in Speicher 512 schreiben.
 
@@ -54,14 +55,16 @@ BCD #add  // springe, wenn niedrigstes Bit eine Null ist, ueber das Addieren hin
 BD #step4
 // #add Addiere 16 Bits in rmh:rm1 zum Ergebnis in reh:rel (mit Ueberlauf der unteren 8 Bits!
 LWDD 00 504   // #add: Lade lower in Akku
+LWDD 10 500     // Lade Faktor A neu
 ADD 10        // Faktor a addieren
 SWDD 00 504
+LWDD 00 506
 BCD #addBCarry
 BD #loadRmh
-LWDD 00 510   // #addBCarry
-ADDD 1
-ADD 01      // #loadRmh
-SWDD 00 510
+ADDD 1   // #addBCarry
+LWDD 11 510   // #loadRmh
+ADD 11
+SWDD 00 506
 
 
 // #step4
@@ -75,10 +78,12 @@ SLL  // #addACarry
 INC
 BD #step5
 SLL // #shiftMSB
+SWDD 00 510
 
 //  #step5
 LWDD 00 502
-BZD #step4
+BZD #step1
+BD vorzeichen
 
 
 // vorzeichen:
