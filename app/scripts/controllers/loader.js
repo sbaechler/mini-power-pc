@@ -94,7 +94,7 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
       "BD 182",          // +3: Else überspringen
       "SLL",             // Else: Shift nach links
       "SWDD 00 506",    // Adresse 180: Plus 1
-      "SWDD 00 506",     // Abspeichern
+      "INC",     // Abspeichern
 
       //Adresse 184
       "LWDD 00 502",
@@ -115,7 +115,7 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
       "LWDD 00 510",     //Adresse 210
       "DEC",
       "SWDD 00 510",
-      "BNZD 164",        //mult
+      "BNZD 170",        //mult
 
       //vorzeichen: Adresse 216
       "LWDD 00 512",     // Zahl aus Speicher 512 laden. Wenn 1, muss Resultat negiert werden.
