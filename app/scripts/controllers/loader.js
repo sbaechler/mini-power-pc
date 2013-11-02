@@ -75,62 +75,65 @@ angular.module('miniPowerPCLoader', ['sysconvProvider', 'memoryProvider', 'miniP
       "SWDD 00 512",     // 1 in Speicher 512 schreiben.
 
 
-      //load Adresse 150
-      "LWDD 10 500",     // Adresse 150: Lade Faktor a in Register 10
-      "CLR 01",          // Register 01 löschen
-      "CLR 00",          // Akku löschen
-      "ADDD 16",         // 16 in den Akku schreiben.
-      "SWDD 00 510",     // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
-      "SWDD 10 504",     // Adresse 160: Faktor a in Speicher #504 zwischenspeichern.
-      "SWDD 01 506",     // Speicher #506 löschen.
+        // load:
+        "LWDD 10 500",     // Lade Faktor a in Register 10  150
+        "CLR 00",          // Akku löschen
+        "CLR 01",          //
+        "CLR 10",          //
+        "SWDD 00 510",     // Hilfsregister löschen.
+        "SWDD 00 506",     // Speicher #506 löschen.   160
+        "SWDD 00 504",     // Speicher 504 (lower) löschen.
 
-      //mult: Adresse 164
-      "LWDD 00 504",
-      "SLL",             // Low Byte nach links
-      "SWDD 00 504",
-      "LWDD 00 506",     // Adresse 170: High Byte laden
-      "BD 178",         // +3: Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
-      "SLL",             // Shift nach links
-      "BD 182",          // +3: Else überspringen
-      "SLL",             // Else: Shift nach links
-      "SWDD 00 506",    // Adresse 180: Plus 1
-      "INC",     // Abspeichern
+        // mult:
+        // Erster Schritt: Niedrigstes Bit von Faktor b
+        // in das Carry-Bit schieben (von links Nullen nachschieben)
+        "LWDD 00 502",
+        "SRL",
+        "SWDD 00 502",
+        // #step2: Verzweigen je nachdem ob eine Null oder eine Eins im Carry steht
+        "BCD 174",  // springe, wenn niedrigstes Bit eine Null ist, ueber das Addieren hinweg.  170
+        "BD 192",  // -> # step4
+        // #add Addiere 16 Bits in rmh:rm1 zum Ergebnis in reh:rel (mit Ueberlauf der unteren 8 Bits!
+        "LWDD 00 504",   // #add: Lade lower in Akku
+        "ADD 10",        // Faktor a addieren
+        "SWDD 00 504",
+        "BCD 184",  // 180  ->#addBCarry
+        "BD 188",  // -> #loadRmh
+        "LWDD 00 510",   // #addBCarry
+        "ADDD 1",
+        "ADD 01",    // #loadRmh
+        "SWDD 00 510",      // 190
 
-      //Adresse 184
-      "LWDD 00 502",
-      "SLL",             // Das MSB von Faktor b ins Carry schreiben.
-      "SWDD 00 502",     // Wider speichern
-      "BCD 194",         // Adresse 190: +2: Ist das Flag gesetzt: Faktor a Addieren.
-      "BD 208",          // +8: If Teil überspringen
-      "LWDD 00 504",     // Faktor A zum Ergebnis addieren.
-      "ADD 10",          //
-      "SWDD 00 504",
-      "BCD 204",         // Adresse 200: +2:Überlauf bei Lower: 1 zu upper addieren.
-      "BD 210",          // +4: If Teil überspringen
-      "LWDD 00 506",
-      "INC",             // 1 zu upper hinzufügen.
-      "SWDD 00 506",
+        // #step4
+        "LWDD 00 500",
+        "SLL",
+        "SWDD 00 500",
+        "LWDD 00 510",
+        "BCD 204",       // 200  -> #addACarry
+        "BD 210",   //-> #shiftMSB
+        "SLL",  // #addACarry
+        "INC",
+        "BD 212",   // -> #step5
+        "SLL", // #shiftMSB     210
 
-      //noadd: Adresse 210
-      "LWDD 00 510",     //Adresse 210
-      "DEC",
-      "SWDD 00 510",
-      "BNZD 170",        //mult
+        //  #step5
+        "LWDD 00 502",
+        "BZD 192",  // -> #step4
 
       //vorzeichen: Adresse 216
       "LWDD 00 512",     // Zahl aus Speicher 512 laden. Wenn 1, muss Resultat negiert werden.
-      "SRL",             //Adresse 220: LSB checken
-      "BCD 226",         // +2
+      "SRL",             // LSB checken
+      "BCD 224",         // +2      220
       "END",
       "LWDD 00 504",     // Lower Zahl laden
       "NOT",
-      "INC",             //Adresse 230
-      "SWDD 00 504",
+      "INC",             //Adresse
+      "SWDD 00 504",      //  230
       "LWDD 00 506",
       "NOT",
       "INC",
-      "SWDD 00 506",    //240
-      "END"
+      "SWDD 00 506",
+      "END"             //240
 
       ].join("\n")
         }

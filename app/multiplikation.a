@@ -2,7 +2,7 @@
 // Faktor a befindet sich in #500, Faktor b in #502.
 // Lösung muss in Speicher #504 (lower) und #506 (higher) stehen.
 
-// Zwischenspeicher: 510: Zähler, 512: Vorzeichen.
+// Zwischenspeicher: 510: Hilfsregister, 512: Vorzeichen. 514: 1-er Register
 
 CLR 00
 SWDD 00 512     // Speicher 512 auf 0 setzen.
@@ -34,14 +34,14 @@ INC
 SWDD 00 512     // 1 in Speicher 512 schreiben.
 
 
-load:
+// load:
 LWDD 10 500     // Lade Faktor a in Register 10
-CLR 01          // Register 01 löschen
 CLR 00          // Akku löschen
-ADDD 16         // 16 in den Akku schreiben.
-SWDD 00 510     // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
-SWDD 01 504     // Speicher #504 löschen.
-SWDD 01 506     // Speicher #506 löschen.
+CLR 01          //
+CLR 10          //
+SWDD 00 510     // Hilfsregister löschen.
+SWDD 00 506     // Speicher #506 löschen.
+SWDD 00 504     // Speicher 504 (lower) löschen.
 
 // mult:
 // Erster Schritt: Niedrigstes Bit von Faktor b
@@ -49,17 +49,36 @@ SWDD 01 506     // Speicher #506 löschen.
 LWDD 00 502
 SRL
 SWDD 00 502
-BCD #add
-BD #step3
+// #step2: Verzweigen je nachdem ob eine Null oder eine Eins im Carry steht
+BCD #add  // springe, wenn niedrigstes Bit eine Null ist, ueber das Addieren hinweg.
+BD #step4
+// #add Addiere 16 Bits in rmh:rm1 zum Ergebnis in reh:rel (mit Ueberlauf der unteren 8 Bits!
 LWDD 00 504   // #add: Lade lower in Akku
 ADD 10        // Faktor a addieren
 SWDD 00 504
-BCD #addCarry
-BD #step4
-LWDD 00 506   // #addCarry
-INC
-SWDD 00 506
+BCD #addBCarry
+BD #loadRmh
+LWDD 00 510   // #addBCarry
+ADDD 1
+ADD 01      // #loadRmh
+SWDD 00 510
 
+
+// #step4
+LWDD 00 500
+SLL
+SWDD 00 500
+LWDD 00 510
+BCD #addACarry
+BD # shiftMSB
+SLL  // #addACarry
+INC
+BD #step5
+SLL // #shiftMSB
+
+//  #step5
+LWDD 00 502
+BZD #step4
 
 
 // vorzeichen:
