@@ -32,7 +32,7 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                 // var result = $sysconv.bintruncate($sysconv.binadd(bin1, bin2), WORDLENGTH);
                 // $scope.carryBit = bin1[0]==bin2[0] && bin1[0]!=result[0];
                 var result = $sysconv.binadd(bin1, bin2);
-                $scope.carryBit = result.length > WORDLENGTH && !(bin1[0]&&bin2[0]);
+                $scope.carryBit = result.length > WORDLENGTH;// && !(bin1[0]&&bin2[0]);
                 $scope.r00 = $sysconv.binarray2word($sysconv.bintruncate(result, WORDLENGTH));
                 }
             },
