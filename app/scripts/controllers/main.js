@@ -166,10 +166,10 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
         ];
         $scope.get_memory = function(start, end){
                                 return $memory.memory(start, end);
-                            }
+                            };
         $scope.get_decimal = function(addr){
                                 return $memory.getDecimal(addr);
-                            }
+                            };
         $scope.executionCounter = 0;
         $scope.currentSteps = [];  // Hilfsarray zur Darstellung.
         $scope._get_instruction = function(){
@@ -185,8 +185,14 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                                   'class': i==$scope.instructionCounter ? 'success': ''});
                     }
                     $scope.currentSteps = mem;
-                    for(var i=500; i<=510; i++) {
+                    for(var i=500; i<=510; i=i+2) {
                         $scope.speicherWert[i] = $memory.getDecimal(i);
+                    }
+                    for(var i = 507; i<516; i=i+4) {
+                        var lower = $memory.getWord(i-3);
+                        var higher = $memory.getWord(i-1);
+                        var longStr = higher + lower;
+                        $scope.speicherWert[i] = $sysconv.bin2dec(longStr, 32);
                     }
                     $scope._get_instruction();
                 };

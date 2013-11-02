@@ -43,6 +43,10 @@ body {
 .memory-table .display_false { display: none; }
 .memory-table input { border: 1px solid #ddd; }
 .memory-table input:focus { border: 1px solid grey; }
+.memory-table .even {
+    border: 1px solid transparent;
+    background: transparent;
+}
 
 .button-load { margin-top: 1em; }
 
