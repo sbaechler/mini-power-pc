@@ -66,9 +66,11 @@
     <div class="scrolling-wrapper well">
       <table class="table table-bordered memory-table">
         <tr ng-repeat="cell in get_memory(500,530) track by $index">
-          <th width="50">{{$index+500}}</th><td>{{cell}}</td><td style="width: 6em;"><input type="text" ng-Pattern="/^-?\d+$/"
+          <th width="50">{{$index+500}}</th><td>{{cell}}</td>
+            <td style="width: 6em;"><input type="text" ng-Pattern="/^-?\d+$/"
                 ng-model="speicherWert[$index+500]" initial="{{getDecimal($index+500)}}"
-                ng-maxlength="6" ng-change="storeValue($index+500)" style="width: 6em;" class="display_{{$even}}"></td>
+                ng-maxlength="6" ng-change="storeValue($index+500)" style="width: 6em;" ng-disabled="$index%2"
+                    ng-class-even="'even'"></td>
         </tr>
       </table>
     </div>

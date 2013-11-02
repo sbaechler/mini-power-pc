@@ -1,5 +1,6 @@
 'use strict';
-var miniPowerPCFilters = angular.module('miniPowerPCFilters', ['sysconvProvider']);
+var miniPowerPCFilters = angular.module('miniPowerPCFilters',
+    ['sysconvProvider']);
 
 miniPowerPCFilters
     .filter('subarray', function(){

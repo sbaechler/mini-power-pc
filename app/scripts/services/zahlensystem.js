@@ -281,8 +281,9 @@ angular.module('sysconvProvider', [], function($provide){
         }
     },
     // convert a binary String to decimal
-    bin2dec: function(bininput){
-        var bin = this.bintruncate(this.bininputtobin(bininput), 16);
+    bin2dec: function(bininput, size){
+        var size = size || 16;
+        var bin = this.bintruncate(this.bininputtobin(bininput), size);
         if (bin[0]) {  // negative Zahl
             var reversed = this.twoscomplement(this.onescomplement(bin));
             return parseInt(this.bintodecoutput(reversed).replace(/\s/g, '')) * (-1);
