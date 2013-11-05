@@ -2,7 +2,7 @@
 // Faktor a befindet sich in #500, Faktor b in #502.
 // Lösung muss in Speicher #504 (lower) und #506 (higher) stehen.
 
-// Zwischenspeicher: 510: Zähler, 512: Vorzeichen.
+// Zwischenspeicher: 510: Hilfsregister, 512: Vorzeichen. 514: 1-er Register
 
 CLR 00
 SWDD 00 512     // Speicher 512 auf 0 setzen.
@@ -17,6 +17,7 @@ NOT             // Invertieren
 INC             // 1 hinzufügen
 SWDD 00 500     // Positive Zahl in Speicher 500 schreiben.
 CLR 00
+LWDD 00 512
 INC
 SWDD 00 512     // 1 in Speicher 512 schreiben.
 
@@ -34,48 +35,58 @@ INC
 SWDD 00 512     // 1 in Speicher 512 schreiben.
 
 
-load:
+// load:
 LWDD 10 500     // Lade Faktor a in Register 10
-CLR 01          // Register 01 löschen
 CLR 00          // Akku löschen
-ADDD 16         // 16 in den Akku schreiben.
-SWDD 00 510     // Die Zahl (16) in Speicher #510 schreiben. Dies ist ein Zähler
-SWDD 10 504     // Faktor a in Speicher #504 zwischenspeichern.
-SWDD 01 506     // Speicher #506 löschen.
+CLR 01          //
+CLR 10          //
+SWDD 00 510     // Hilfsregister löschen.
+SWDD 00 506     // Speicher #506 löschen.
+SWDD 00 504     // Speicher 504 (lower) löschen.
 
-mult:
-LWDD 00 504
-SLL             // Low Byte nach links
-SWDD 00 504
-LWDD 00 506     // High Byte laden
-BCD +3          // Wenn das Carry-Flag gesetzt ist, gehe direkt zu Else.
-SLL             // Shift nach links
-BD +3           // Else überspringen
-SLL             // Else: Shift nach links
-INC             // Plus 1
-SWDD 00 506     // Abspeichern
-
+// mult:
+// Erster Schritt: Niedrigstes Bit von Faktor b
+// in das Carry-Bit schieben (von links Nullen nachschieben)
 LWDD 00 502
-SLL             // Das MSB von Faktor b ins Carry schreiben.
-SWDD 00 502     // Wider speichern
-BCD +2          // Ist das Flag gesetzt: Faktor a Addieren.
-BD +8            // If Teil überspringen
-LWDD 00 504     // Faktor A zum Ergebnis addieren.
-ADD 10          //
+SRL
+SWDD 00 502
+// #step2: Verzweigen je nachdem ob eine Null oder eine Eins im Carry steht
+BCD #add  // springe, wenn niedrigstes Bit eine Null ist, ueber das Addieren hinweg.
+BD #step4
+// #add Addiere 16 Bits in rmh:rm1 zum Ergebnis in reh:rel (mit Ueberlauf der unteren 8 Bits!
+LWDD 00 504   // #add: Lade lower in Akku
+LWDD 10 500     // Lade Faktor A neu
+ADD 10        // Faktor a addieren
 SWDD 00 504
-BCD + 2         // Überlauf bei Lower: 1 zu upper addieren.
-BD + 4          // If Teil überspringen
 LWDD 00 506
-INC             // 1 zu upper hinzufügen.
+BCD #addBCarry
+BD #loadRmh
+ADDD 1   // #addBCarry
+LWDD 11 510   // #loadRmh
+ADD 11
 SWDD 00 506
 
-noadd:
-LWDD 00 510
-DEC
-SWDD 00 510
-BNZD mult
 
-vorzeichen:
+// #step4
+LWDD 00 500
+SLL
+SWDD 00 500
+LWDD 00 510
+BCD #addACarry
+BD # shiftMSB
+SLL  // #addACarry
+INC
+BD #step5
+SLL // #shiftMSB
+SWDD 00 510
+
+//  #step5
+LWDD 00 502
+BZD #step1
+BD vorzeichen
+
+
+// vorzeichen:
 LWDD 00 512     // Zahl aus Speicher 512 laden. Wenn 1, muss Resultat negiert werden.
 SRL             // LSB checken
 BCD + 2

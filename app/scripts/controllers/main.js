@@ -29,9 +29,11 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
             {"name": "ADD Rnr", "regex": /^0000([01]{2})111[01]{7}$/, "assemblerFunction": function(matches) {
                 var bin1 = $sysconv.bintruncate($sysconv.bininputtobin($scope.r00), WORDLENGTH);
                 var bin2 = $sysconv.bintruncate($sysconv.bininputtobin($scope['r'+matches[1]]), WORDLENGTH);
-                var result = $sysconv.bintruncate($sysconv.binadd(bin1, bin2), WORDLENGTH);
-                $scope.carryBit = bin1[0]==bin2[0] && bin1[0]!=result[0];
-                $scope.r00 = $sysconv.binarray2word(result);
+                // var result = $sysconv.bintruncate($sysconv.binadd(bin1, bin2), WORDLENGTH);
+                // $scope.carryBit = bin1[0]==bin2[0] && bin1[0]!=result[0];
+                var result = $sysconv.binadd(bin1, bin2);
+                $scope.carryBit = result.length > WORDLENGTH;// && !(bin1[0]&&bin2[0]);
+                $scope.r00 = $sysconv.binarray2word($sysconv.bintruncate(result, WORDLENGTH));
                 }
             },
 
@@ -188,12 +190,11 @@ miniPowerPCControllers.controller('MainCtrl', ['$scope', '$memory', '$sysconv', 
                     for(var i=500; i<=510; i=i+2) {
                         $scope.speicherWert[i] = $memory.getDecimal(i);
                     }
-                    for(var i = 507; i<516; i=i+4) {
-                        var lower = $memory.getWord(i-3);
-                        var higher = $memory.getWord(i-1);
-                        var longStr = higher + lower;
-                        $scope.speicherWert[i] = $sysconv.bin2dec(longStr, 32);
-                    }
+                    var i = 507;
+                    var lower = $memory.getWord(i-3);
+                    var higher = $memory.getWord(i-1);
+                    var longStr = higher + lower;
+                    $scope.speicherWert[i] = $sysconv.bin2dec(longStr, 32);
                     $scope._get_instruction();
                 };
         $scope.updateUI();

@@ -102,14 +102,15 @@ describe('Controller: MainCtrl', function () {
         scope.carryBit = false;
 
         scope.r00 = "01111111 11111111"; // 32 767
-        scope.instructionRegister = "00000111 10000000";
+        scope.instructionRegister = "10000111 10000000";
         scope._interpret();
         expect(scope.carryBit).toBe(true);
 
         scope.r00 = "00000000 00001010"; // 10
+        scope.r10 = "11111111 11110110"; // -10
         scope.instructionRegister = "00001011 10000000"; // -10
         scope._interpret();
-        expect(scope.carryBit).toBe(false);
+        expect(scope.carryBit).toBe(true);
         expect(scope.r00).toEqual("00000000 00000000");
 
     });
